@@ -1,14 +1,13 @@
 # Core (required to run the starter as-is)
 streamlit
-scikit-learn
 numpy
 pandas
 python-dotenv
 
 pypdf
+sentence-transformers   # real embeddings (BAAI/bge-small-en-v1.5), replaces TF-IDF
 
 # Optional upgrades — install when you get there
-# sentence-transformers   # real embeddings instead of TF-IDF
 # chromadb                 # real persistent vector database
 # anthropic                # LLM-generated answers, Claude provider
 # openai                   # LLM-generated answers, OpenAI provider
