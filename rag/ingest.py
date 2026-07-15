@@ -8,21 +8,25 @@ it supplies title, source_org, and source_url for each file by relative path;
 files not listed in the manifest fall back to a title derived from the
 filename and a source_org guessed from the immediate parent folder name.
 
-Upgrade path (still open for later milestones):
-- Swap the naive word-count chunker below for a sentence- or paragraph-aware
-  recursive splitter (M4) — the chunk_text(text) -> List[str] interface stays
-  the same so nothing downstream has to change again.
+Chunking splits recursively on paragraph, then sentence, then word boundaries,
+so chunks only break mid-sentence when a single sentence exceeds chunk_size on
+its own.
 """
 
 import json
 import os
+import re
 from dataclasses import dataclass
 from typing import List, Optional
 
 from pypdf import PdfReader
 
+from config import config
+
 _HEADER_PREFIXES = ("Title:", "Source:", "URL:", "Fetched:", "Published:")
 _KNOWN_SOURCE_ORGS = ("who", "cdc", "nih")
+_PARAGRAPH_RE = re.compile(r"\n\s*\n")
+_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
 
 
 @dataclass
@@ -106,29 +110,96 @@ def load_documents(folder: str) -> List[dict]:
     return docs
 
 
-def chunk_text(text: str, chunk_size: int = 80, overlap: int = 20) -> List[str]:
-    """Split text into overlapping word-count chunks (simple, dependency-free).
+def _word_count(text: str) -> int:
+    """Approximate token count as whitespace-separated word count."""
+    return len(text.split())
 
-    Placeholder splitter through M3 — doesn't respect sentence or paragraph
-    boundaries, so a chunk can end mid-sentence. M4 replaces this with a
-    recursive, boundary-aware splitter driven by config.chunk_size_tokens /
-    config.chunk_overlap_tokens.
+
+def _split_into_units(text: str, max_size: int) -> List[str]:
+    """Recursively break text into pieces of at most max_size words each.
+
+    Tries paragraph boundaries first, then sentence boundaries, and only
+    falls back to a hard word-count split for the rare single sentence that
+    exceeds max_size on its own.
     """
-    words = text.split()
-    if not words:
+    units: List[str] = []
+    for paragraph in (p.strip() for p in _PARAGRAPH_RE.split(text)):
+        if not paragraph:
+            continue
+        if _word_count(paragraph) <= max_size:
+            units.append(paragraph)
+            continue
+        for sentence in (s.strip() for s in _SENTENCE_RE.split(paragraph)):
+            if not sentence:
+                continue
+            if _word_count(sentence) <= max_size:
+                units.append(sentence)
+                continue
+            words = sentence.split()
+            for start in range(0, len(words), max_size):
+                units.append(" ".join(words[start:start + max_size]))
+    return units
+
+
+def _tail_units(units: List[str], overlap: int) -> List[str]:
+    """Return the trailing units of `units` whose combined size is <= overlap."""
+    if overlap <= 0:
         return []
-    chunks = []
-    start = 0
-    while start < len(words):
-        end = start + chunk_size
-        chunks.append(" ".join(words[start:end]))
-        if end >= len(words):
+    tail: List[str] = []
+    size = 0
+    for unit in reversed(units):
+        unit_size = _word_count(unit)
+        if tail and size + unit_size > overlap:
             break
-        start = end - overlap
+        tail.insert(0, unit)
+        size += unit_size
+    return tail
+
+
+def chunk_text(
+    text: str,
+    chunk_size: int = config.chunk_size_tokens,
+    overlap: int = config.chunk_overlap_tokens,
+) -> List[str]:
+    """Split text into overlapping chunks along paragraph/sentence boundaries.
+
+    Recursively decomposes the text into paragraph- or sentence-sized units
+    (see _split_into_units), then greedily packs those units into chunks of
+    at most chunk_size words, carrying the trailing ~overlap words of each
+    chunk into the next one so retrieval doesn't lose context at chunk edges.
+    """
+    units = _split_into_units(text, max_size=chunk_size)
+    if not units:
+        return []
+
+    chunks: List[str] = []
+    current_units: List[str] = []
+    current_size = 0
+
+    for unit in units:
+        unit_size = _word_count(unit)
+        while current_units and current_size + unit_size > chunk_size:
+            chunks.append(" ".join(current_units))
+            tail = _tail_units(current_units, overlap)
+            tail_size = sum(_word_count(u) for u in tail)
+            if tail_size >= current_size:
+                # Carried-over overlap alone already fills a chunk (e.g. a
+                # hard-split fragment) — drop it rather than loop forever.
+                tail, tail_size = [], 0
+            current_units, current_size = tail, tail_size
+        current_units.append(unit)
+        current_size += unit_size
+
+    if current_units:
+        chunks.append(" ".join(current_units))
     return chunks
 
 
-def build_chunk_records(docs: List[dict], chunk_size: int = 80, overlap: int = 20) -> List[Chunk]:
+def build_chunk_records(
+    docs: List[dict],
+    chunk_size: int = config.chunk_size_tokens,
+    overlap: int = config.chunk_overlap_tokens,
+) -> List[Chunk]:
     """Turn loaded documents into a flat list of Chunk records ready for embedding."""
     records = []
     for doc in docs:
