@@ -16,7 +16,7 @@ from config import config
 from rag.ingest import load_documents, build_chunk_records
 from rag.embed_store import VectorStore
 from rag.retriever import retrieve
-from rag.generate import generate_answer
+from rag.generate import confidence_level, generate_answer
 
 st.set_page_config(page_title="RAG Search", page_icon="🔎", layout="wide")
 
@@ -42,7 +42,8 @@ with st.sidebar:
     st.header("Settings")
     top_k = st.slider("Number of chunks to retrieve", min_value=1, max_value=10, value=config.top_k_default)
     mode = st.radio("Answer mode", ["extractive", "llm"], index=0,
-                     help="Extractive works with no setup. LLM mode needs ANTHROPIC_API_KEY set.")
+                     help=f"Extractive works with no setup. LLM mode calls {config.llm_provider} "
+                          f"and needs its API key set in .env.")
     st.divider()
     st.caption(f"Indexed **{len(docs)}** documents → **{len(chunks)}** chunks")
     with st.expander("Documents in this index"):
@@ -61,6 +62,10 @@ if search_clicked and query.strip():
 
     st.subheader("Answer")
     st.write(answer)
+
+    confidence = confidence_level(retrieved)
+    if confidence:
+        st.write(f"**Confidence:** {confidence}")
 
     st.subheader("Sources")
     if retrieved:
