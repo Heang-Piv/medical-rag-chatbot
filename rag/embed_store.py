@@ -20,6 +20,9 @@ from sentence_transformers import SentenceTransformer
 from config import config
 
 from .ingest import Chunk
+from .utils import get_logger
+
+_logger = get_logger(__name__)
 
 _COLLECTION_NAME = "medical_chunks"
 _COLLECTION_METADATA = {"hnsw:space": "cosine"}
@@ -55,6 +58,10 @@ class VectorStore:
         self.collection = self.client.get_or_create_collection(
             _COLLECTION_NAME, metadata=_COLLECTION_METADATA
         )
+        _logger.info(
+            "Database loaded: collection '%s' has %d vectors (%s)",
+            _COLLECTION_NAME, self.collection.count(), persist_dir or config.chroma_persist_dir,
+        )
 
     def count(self) -> int:
         """Number of chunks currently persisted in the index."""
@@ -84,6 +91,7 @@ class VectorStore:
             documents=texts,
             metadatas=[_chunk_metadata(c) for c in chunks],
         )
+        _logger.info("Embedding creation: embedded and persisted %d chunks", len(chunks))
 
     def query(self, query_text: str, top_k: int = 3) -> List[Tuple[Chunk, float]]:
         """Return the top_k (chunk, similarity_score) pairs for a query string.

@@ -15,10 +15,19 @@ import streamlit as st
 from config import config
 from rag.ingest import load_documents, build_chunk_records
 from rag.embed_store import VectorStore
-from rag.retriever import retrieve
+from rag.retriever import explain_chunk, retrieve
 from rag.generate import confidence_level, generate_answer
+from rag.utils import get_logger
+
+logger = get_logger(__name__)
 
 st.set_page_config(page_title="RAG Search", page_icon="🔎", layout="wide")
+
+_CONFIDENCE_DISPLAY = {
+    "High": st.success,
+    "Moderate": st.info,
+    "Low": st.warning,
+}
 
 
 @st.cache_resource(show_spinner="Loading index...")
@@ -29,7 +38,16 @@ def load_store():
     return store, docs, chunks
 
 
-store, docs, chunks = load_store()
+try:
+    store, docs, chunks = load_store()
+except Exception:
+    logger.exception("Failed to load the document index")
+    st.error(
+        "Something went wrong while loading the search index. This usually means "
+        "the embedding model couldn't be downloaded or the index files are "
+        "unreadable. Check the terminal logs for details, then try again."
+    )
+    st.stop()
 
 if store.count() == 0:
     st.error(
@@ -51,28 +69,37 @@ with st.sidebar:
             st.write(f"- {d['title']}")
 
 st.title("🔎 RAG-Based AI Search System")
-st.caption("Ask a question about the indexed documents below.")
+st.caption("Ask a question about the indexed medical documents below (WHO / CDC / NIH sources only).")
+st.caption(
+    "⚠️ **Medical disclaimer:** answers are summarized from the retrieved documents only "
+    "and are not a substitute for professional medical advice, diagnosis, or treatment."
+)
 
 query = st.text_input("Your question", placeholder="e.g. How does content-based filtering rank items?")
 search_clicked = st.button("Search", type="primary")
 
 if search_clicked and query.strip():
-    retrieved = retrieve(store, query, top_k=top_k)
-    answer = generate_answer(query, retrieved, mode=mode)
-
-    st.subheader("Answer")
-    st.write(answer)
-
-    confidence = confidence_level(retrieved)
-    if confidence:
-        st.write(f"**Confidence:** {confidence}")
-
-    st.subheader("Sources")
-    if retrieved:
-        for chunk, score in retrieved:
-            with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
-                st.write(chunk.text)
+    try:
+        retrieved = retrieve(store, query, top_k=top_k)
+        answer = generate_answer(query, retrieved, mode=mode)
+    except Exception:
+        logger.exception("Search failed for query: %r", query)
+        st.error("Something went wrong while processing your question. Please try again.")
     else:
-        st.caption("No sources cleared the similarity threshold for this query.")
+        st.subheader("Answer")
+        st.write(answer)
+
+        confidence = confidence_level(retrieved)
+        if confidence:
+            _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
+
+        st.subheader("Sources")
+        if retrieved:
+            for chunk, score in retrieved:
+                with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
+                    st.write(chunk.text)
+                    st.caption(explain_chunk(query, chunk))
+        else:
+            st.caption("No sources cleared the similarity threshold for this query.")
 elif search_clicked:
     st.warning("Type a question first.")

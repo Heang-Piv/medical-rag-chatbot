@@ -23,6 +23,10 @@ from pypdf import PdfReader
 
 from config import config
 
+from .utils import get_logger
+
+_logger = get_logger(__name__)
+
 _HEADER_PREFIXES = ("Title:", "Source:", "URL:", "Fetched:", "Published:")
 _KNOWN_SOURCE_ORGS = ("who", "cdc", "nih")
 _PARAGRAPH_RE = re.compile(r"\n\s*\n")
@@ -82,7 +86,11 @@ def load_documents(folder: str) -> List[dict]:
             rel_path = os.path.relpath(path, folder).replace(os.sep, "/")
 
             if ext == ".pdf":
-                text = _read_pdf(path)
+                try:
+                    text = _read_pdf(path)
+                except Exception as e:
+                    _logger.warning("Skipping unreadable PDF %s: %s", rel_path, e)
+                    continue
             else:
                 with open(path, "r", encoding="utf-8") as f:
                     text = _strip_header(f.read())
@@ -107,6 +115,10 @@ def load_documents(folder: str) -> List[dict]:
                 "source_url": source_url,
                 "path": rel_path,
             })
+    if docs:
+        _logger.info("Loaded %d documents from '%s'", len(docs), folder)
+    else:
+        _logger.warning("No documents found in '%s'", folder)
     return docs
 
 

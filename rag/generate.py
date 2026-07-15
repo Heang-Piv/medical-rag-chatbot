@@ -21,6 +21,9 @@ from config import config
 
 from .ingest import Chunk
 from .prompt import build_prompt
+from .utils import get_logger
+
+_logger = get_logger(__name__)
 
 # Guard 1 (hallucination prevention): shown whenever retrieval finds nothing
 # that clears config.similarity_threshold — see rag/retriever.py.
@@ -53,7 +56,8 @@ def _anthropic_answer(system_prompt: str, user_message: str) -> str:
             system=system_prompt,
             messages=[{"role": "user", "content": user_message}],
         )
-    except (anthropic.APIStatusError, anthropic.APIConnectionError):
+    except (anthropic.APIStatusError, anthropic.APIConnectionError) as e:
+        _logger.warning("Anthropic call failed: %s", e)
         return _LLM_ERROR_MESSAGE
 
     if response.stop_reason == "refusal":
@@ -74,7 +78,8 @@ def _openai_answer(system_prompt: str, user_message: str) -> str:
                 {"role": "user", "content": user_message},
             ],
         )
-    except (openai.APIStatusError, openai.APIConnectionError):
+    except (openai.APIStatusError, openai.APIConnectionError) as e:
+        _logger.warning("OpenAI call failed: %s", e)
         return _LLM_ERROR_MESSAGE
 
     return response.choices[0].message.content or _LLM_ERROR_MESSAGE
@@ -110,10 +115,11 @@ def llm_answer(query: str, retrieved: List[Tuple[Chunk, float]]) -> str:
 
 def generate_answer(query: str, retrieved: List[Tuple[Chunk, float]], mode: str = "extractive") -> str:
     if not retrieved:
+        _logger.info("Refused: no evidence retrieved for query: %r", query[:60])
         return NO_EVIDENCE_MESSAGE
-    if mode == "llm":
-        return llm_answer(query, retrieved)
-    return extractive_answer(query, retrieved)
+    answer = llm_answer(query, retrieved) if mode == "llm" else extractive_answer(query, retrieved)
+    _logger.info("Generation completed: mode=%s provider=%s", mode, config.llm_provider if mode == "llm" else "n/a")
+    return answer
 
 
 def confidence_level(retrieved: List[Tuple[Chunk, float]]) -> Optional[str]:

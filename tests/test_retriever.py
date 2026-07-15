@@ -1,10 +1,11 @@
-"""Tests for the similarity-threshold retrieval guard in rag/retriever.py (M7)."""
+"""Tests for the similarity-threshold retrieval guard and per-chunk
+explanations in rag/retriever.py (M7/M10)."""
 
 import pytest
 
 from rag.embed_store import VectorStore
 from rag.ingest import Chunk
-from rag.retriever import retrieve
+from rag.retriever import explain_chunk, retrieve
 
 CHUNKS = [
     Chunk(chunk_id="a::0", doc_title="Diabetes", text="Diabetes is a chronic disease affecting blood sugar levels.", source_org="WHO"),
@@ -39,3 +40,16 @@ def test_retrieve_uses_config_defaults_when_not_overridden(store: VectorStore) -
     # Should not raise, and should behave like an explicit call with config values.
     results = retrieve(store, "diabetes symptoms")
     assert isinstance(results, list)
+
+
+def test_explain_chunk_surfaces_shared_terms() -> None:
+    explanation = explain_chunk("What causes diabetes?", CHUNKS[0])
+    assert "Diabetes" in explanation
+    assert "diabetes" in explanation.lower()
+
+
+def test_explain_chunk_falls_back_honestly_with_no_shared_terms() -> None:
+    # A paraphrase with no literal overlap — the case semantic search is for.
+    explanation = explain_chunk("What triggers elevated glucose long-term?", CHUNKS[0])
+    assert "Diabetes" in explanation
+    assert "closest semantic match" in explanation
