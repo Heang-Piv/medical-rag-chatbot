@@ -16,11 +16,15 @@ from typing import List, Tuple
 
 from .ingest import Chunk
 
+# Guard 1 (hallucination prevention): shown whenever retrieval finds nothing
+# that clears config.similarity_threshold — see rag/retriever.py.
+NO_EVIDENCE_MESSAGE = "I could not find sufficient information in the provided document collection."
+
 
 def extractive_answer(query: str, retrieved: List[Tuple[Chunk, float]]) -> str:
     if not retrieved:
-        return "No relevant passages were found for that query."
-    lines = [f"Top passages related to: \u201c{query}\u201d\n"]
+        return NO_EVIDENCE_MESSAGE
+    lines = [f"Top passages related to: “{query}”\n"]
     for chunk, score in retrieved:
         lines.append(f"[{chunk.doc_title}, score={score:.2f}] {chunk.text}\n")
     return "\n".join(lines)
@@ -56,6 +60,8 @@ def llm_answer(query: str, retrieved: List[Tuple[Chunk, float]]) -> str:
 
 
 def generate_answer(query: str, retrieved: List[Tuple[Chunk, float]], mode: str = "extractive") -> str:
+    if not retrieved:
+        return NO_EVIDENCE_MESSAGE
     if mode == "llm":
         return llm_answer(query, retrieved)
     return extractive_answer(query, retrieved)

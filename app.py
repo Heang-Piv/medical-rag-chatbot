@@ -15,6 +15,7 @@ import streamlit as st
 from config import config
 from rag.ingest import load_documents, build_chunk_records
 from rag.embed_store import VectorStore
+from rag.retriever import retrieve
 from rag.generate import generate_answer
 
 st.set_page_config(page_title="RAG Search", page_icon="🔎", layout="wide")
@@ -39,7 +40,7 @@ if store.count() == 0:
 
 with st.sidebar:
     st.header("Settings")
-    top_k = st.slider("Number of chunks to retrieve", min_value=1, max_value=10, value=3)
+    top_k = st.slider("Number of chunks to retrieve", min_value=1, max_value=10, value=config.top_k_default)
     mode = st.radio("Answer mode", ["extractive", "llm"], index=0,
                      help="Extractive works with no setup. LLM mode needs ANTHROPIC_API_KEY set.")
     st.divider()
@@ -55,15 +56,18 @@ query = st.text_input("Your question", placeholder="e.g. How does content-based 
 search_clicked = st.button("Search", type="primary")
 
 if search_clicked and query.strip():
-    retrieved = store.query(query, top_k=top_k)
+    retrieved = retrieve(store, query, top_k=top_k)
     answer = generate_answer(query, retrieved, mode=mode)
 
     st.subheader("Answer")
     st.write(answer)
 
     st.subheader("Sources")
-    for chunk, score in retrieved:
-        with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
-            st.write(chunk.text)
+    if retrieved:
+        for chunk, score in retrieved:
+            with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
+                st.write(chunk.text)
+    else:
+        st.caption("No sources cleared the similarity threshold for this query.")
 elif search_clicked:
     st.warning("Type a question first.")
