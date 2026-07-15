@@ -15,6 +15,7 @@ import os
 from typing import List, Tuple
 
 from .ingest import Chunk
+from .prompt import build_prompt
 
 # Guard 1 (hallucination prevention): shown whenever retrieval finds nothing
 # that clears config.similarity_threshold — see rag/retriever.py.
@@ -40,11 +41,7 @@ def llm_answer(query: str, retrieved: List[Tuple[Chunk, float]]) -> str:
             "Falling back to extractive mode:\n\n" + extractive_answer(query, retrieved)
         )
 
-    context = "\n\n".join(f"Source: {c.doc_title}\n{c.text}" for c, _ in retrieved)
-    prompt = (
-        "Answer the question using ONLY the sources below. Cite the source title(s) "
-        f"you used.\n\n{context}\n\nQuestion: {query}\nAnswer:"
-    )
+    system_prompt, user_message = build_prompt(query, retrieved)
 
     # TODO: uncomment once the `anthropic` package is installed
     # import anthropic
@@ -52,11 +49,15 @@ def llm_answer(query: str, retrieved: List[Tuple[Chunk, float]]) -> str:
     # response = client.messages.create(
     #     model="claude-sonnet-4-6",
     #     max_tokens=500,
-    #     messages=[{"role": "user", "content": prompt}],
+    #     system=system_prompt,
+    #     messages=[{"role": "user", "content": user_message}],
     # )
     # return response.content[0].text
 
-    return "[TODO] Wire up your LLM call in rag/generate.py using the prompt below:\n\n" + prompt
+    return (
+        "[TODO] Wire up your LLM call in rag/generate.py using the prompt below:\n\n"
+        f"--- system ---\n{system_prompt}\n\n--- user ---\n{user_message}"
+    )
 
 
 def generate_answer(query: str, retrieved: List[Tuple[Chunk, float]], mode: str = "extractive") -> str:
