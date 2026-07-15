@@ -20,16 +20,22 @@ from rag.generate import generate_answer
 st.set_page_config(page_title="RAG Search", page_icon="🔎", layout="wide")
 
 
-@st.cache_resource(show_spinner="Loading and indexing documents...")
+@st.cache_resource(show_spinner="Loading index...")
 def load_store():
     docs = load_documents(config.data_folder)
     chunks = build_chunk_records(docs)
     store = VectorStore()
-    store.build(chunks)
     return store, docs, chunks
 
 
 store, docs, chunks = load_store()
+
+if store.count() == 0:
+    st.error(
+        "The document index hasn't been built yet. From the project root, run:\n\n"
+        "`python scripts/build_index.py`\n\nthen restart this app."
+    )
+    st.stop()
 
 with st.sidebar:
     st.header("Settings")
@@ -37,7 +43,7 @@ with st.sidebar:
     mode = st.radio("Answer mode", ["extractive", "llm"], index=0,
                      help="Extractive works with no setup. LLM mode needs ANTHROPIC_API_KEY set.")
     st.divider()
-    st.caption(f"Indexed **{len(docs)}** documents \u2192 **{len(chunks)}** chunks")
+    st.caption(f"Indexed **{len(docs)}** documents → **{len(chunks)}** chunks")
     with st.expander("Documents in this index"):
         for d in docs:
             st.write(f"- {d['title']}")
@@ -57,7 +63,7 @@ if search_clicked and query.strip():
 
     st.subheader("Sources")
     for chunk, score in retrieved:
-        with st.expander(f"{chunk.doc_title}  \u00b7  similarity {score:.2f}"):
+        with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
             st.write(chunk.text)
 elif search_clicked:
     st.warning("Type a question first.")

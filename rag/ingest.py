@@ -200,13 +200,21 @@ def build_chunk_records(
     chunk_size: int = config.chunk_size_tokens,
     overlap: int = config.chunk_overlap_tokens,
 ) -> List[Chunk]:
-    """Turn loaded documents into a flat list of Chunk records ready for embedding."""
+    """Turn loaded documents into a flat list of Chunk records ready for embedding.
+
+    chunk_id is keyed on the document's file path (falling back to its title
+    if no path is given), not the title alone — two source documents can
+    share a human-readable title (e.g. a WHO and an NIH page both titled
+    "Diabetes"), and chunk_id must stay unique across the whole corpus since
+    ChromaDB uses it as the vector store's primary key.
+    """
     records = []
     for doc in docs:
         pieces = chunk_text(doc["text"], chunk_size=chunk_size, overlap=overlap)
+        doc_key = doc.get("path", doc["title"])
         for i, piece in enumerate(pieces):
             records.append(Chunk(
-                chunk_id=f"{doc['title']}::{i}",
+                chunk_id=f"{doc_key}::{i}",
                 doc_title=doc["title"],
                 text=piece,
                 source_org=doc.get("source_org"),

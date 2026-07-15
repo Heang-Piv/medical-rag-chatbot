@@ -6,8 +6,8 @@ python-dotenv
 
 pypdf
 sentence-transformers   # real embeddings (BAAI/bge-small-en-v1.5), replaces TF-IDF
+chromadb                # persistent vector database
 
 # Optional upgrades — install when you get there
-# chromadb                 # real persistent vector database
 # anthropic                # LLM-generated answers, Claude provider
 # openai                   # LLM-generated answers, OpenAI provider

@@ -1,6 +1,5 @@
-"""Tests for the embedding-based VectorStore in rag/embed_store.py (M5)."""
+"""Tests for the ChromaDB-backed VectorStore in rag/embed_store.py (M5/M6)."""
 
-import numpy as np
 import pytest
 
 from rag.embed_store import VectorStore
@@ -13,22 +12,21 @@ CHUNKS = [
 ]
 
 
-@pytest.fixture(scope="module")
-def store() -> VectorStore:
-    s = VectorStore()
+@pytest.fixture
+def store(tmp_path) -> VectorStore:
+    """A VectorStore backed by a throwaway persist directory, so tests never
+    touch the real chroma_db/ index built by scripts/build_index.py."""
+    s = VectorStore(persist_dir=str(tmp_path / "chroma"))
     s.build(CHUNKS)
     return s
 
 
-def test_build_creates_normalized_embeddings(store: VectorStore) -> None:
-    assert store.embeddings is not None
-    assert store.embeddings.shape[0] == len(CHUNKS)
-    norms = np.linalg.norm(store.embeddings, axis=1)
-    assert np.allclose(norms, 1.0, atol=1e-4)
+def test_build_persists_all_chunks(store: VectorStore) -> None:
+    assert store.count() == len(CHUNKS)
 
 
-def test_query_before_build_raises() -> None:
-    empty_store = VectorStore()
+def test_query_before_build_raises(tmp_path) -> None:
+    empty_store = VectorStore(persist_dir=str(tmp_path / "empty_chroma"))
     with pytest.raises(RuntimeError):
         empty_store.query("diabetes symptoms")
 
@@ -43,8 +41,24 @@ def test_query_returns_top_k_ranked_by_similarity(store: VectorStore) -> None:
     assert -1.0 <= top_score <= 1.0
 
 
+def test_query_preserves_chunk_metadata(store: VectorStore) -> None:
+    results = store.query("blood sugar disease", top_k=1)
+    chunk, _ = results[0]
+    assert chunk.doc_title == "Diabetes"
+    assert chunk.source_org == "WHO"
+    assert chunk.source_url is None
+
+
 def test_semantic_match_beats_keyword_mismatch(store: VectorStore) -> None:
     """A paraphrased query with no shared keywords should still retrieve the
     right chunk first — the reason we moved off TF-IDF."""
     results = store.query("flu-like symptoms and body temperature", top_k=1)
     assert results[0][0].doc_title == "Influenza"
+
+
+def test_rebuild_replaces_prior_index(tmp_path) -> None:
+    """build() should fully replace the index, not append to it."""
+    s = VectorStore(persist_dir=str(tmp_path / "chroma"))
+    s.build(CHUNKS)
+    s.build(CHUNKS[:1])
+    assert s.count() == 1
