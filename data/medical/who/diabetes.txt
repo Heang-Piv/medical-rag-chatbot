@@ -1,0 +1,32 @@
+Title: Diabetes
+Source: World Health Organization (WHO)
+URL: https://www.who.int/news-room/fact-sheets/detail/diabetes
+Fetched: 2026-07-16
+
+Overview
+
+Diabetes is a chronic disease that occurs when the pancreas does not produce enough insulin, or when the body cannot effectively use the insulin it produces. Insulin is a hormone that regulates blood glucose. Hyperglycaemia, or raised blood glucose, is a common effect of uncontrolled diabetes and, over time, leads to serious damage to many of the body's systems, especially the nerves and blood vessels.
+
+Types of diabetes
+
+Type 1 diabetes is thought to be caused by an autoimmune reaction in which the body's immune system attacks the insulin-producing cells of the pancreas; the cause is not known and it cannot currently be prevented. People with type 1 diabetes need daily insulin injections to survive. Type 2 diabetes, which accounts for the large majority of diabetes cases worldwide, results from the body's ineffective use of insulin and is largely the result of excess body weight and physical inactivity; symptoms may be similar to type 1 diabetes but are often less marked, so the disease may be diagnosed years after onset, once complications have already arisen. Gestational diabetes is hyperglycaemia that is first recognized during pregnancy and, while symptoms usually resolve after delivery, it increases the risk of complications during pregnancy and delivery, and raises the future risk of type 2 diabetes for both mother and child.
+
+Symptoms
+
+Common symptoms of diabetes include excessive thirst, frequent urination, unexplained weight loss, blurred vision, fatigue, and slow-healing wounds. In type 1 diabetes, symptoms can appear suddenly; in type 2 diabetes, symptoms are often mild and can go unnoticed for years.
+
+Complications
+
+Over time, diabetes can damage the heart, blood vessels, eyes, kidneys, and nerves. Adults with diabetes have a two- to three-fold increased risk of heart attacks and strokes. Combined with reduced blood flow, neuropathy (nerve damage) in the feet increases the chance of foot ulcers, infection, and eventual limb amputation. Diabetic retinopathy is an important cause of blindness and results from long-term accumulated damage to the small blood vessels in the retina; diabetes is among the leading causes of kidney failure.
+
+Global burden
+
+The number of people living with diabetes has been rising steadily worldwide in recent decades, with the vast majority of cases being type 2 diabetes and much of the increase associated with increases in overweight and obesity. Diabetes is a major cause of blindness, kidney failure, heart attacks, stroke, and lower limb amputation.
+
+Prevention and management
+
+Type 2 diabetes can often be prevented or its onset delayed through simple lifestyle measures, including achieving and maintaining a healthy body weight, being physically active (at least 30 minutes of regular, moderate-intensity activity most days), eating a healthy diet low in sugar and saturated fats, and avoiding tobacco use. Diabetes can be managed and its consequences avoided or delayed through a combination of medication (including insulin for type 1 and, often, oral medicines or insulin for type 2), regular screening and treatment for complications, and diet and physical activity.
+
+WHO response
+
+WHO supports countries in the prevention and control of diabetes through the Global Diabetes Compact, which aims to reduce the risk of diabetes and ensure that everyone diagnosed has access to equitable, comprehensive, affordable, and quality treatment and care.

@@ -1,0 +1,194 @@
+[
+  {
+    "filename": "who/cardiovascular_diseases.txt",
+    "title": "Cardiovascular diseases (CVDs)",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)",
+    "word_count": 454
+  },
+  {
+    "filename": "who/diabetes.txt",
+    "title": "Diabetes",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/diabetes",
+    "word_count": 540
+  },
+  {
+    "filename": "who/hiv.txt",
+    "title": "HIV",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/hiv-aids",
+    "word_count": 397
+  },
+  {
+    "filename": "who/hypertension.txt",
+    "title": "Hypertension",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/hypertension",
+    "word_count": 1231
+  },
+  {
+    "filename": "who/influenza_seasonal.txt",
+    "title": "Influenza (seasonal)",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/influenza-(seasonal)",
+    "word_count": 559
+  },
+  {
+    "filename": "who/malaria.txt",
+    "title": "Malaria",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/malaria",
+    "word_count": 452
+  },
+  {
+    "filename": "who/obesity_and_overweight.txt",
+    "title": "Obesity and overweight",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+    "word_count": 724
+  },
+  {
+    "filename": "who/tuberculosis.txt",
+    "title": "Tuberculosis",
+    "source_org": "WHO",
+    "source_org_full": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/tuberculosis",
+    "word_count": 498
+  },
+  {
+    "filename": "cdc/antimicrobial_resistance.txt",
+    "title": "Antimicrobial Resistance",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/antimicrobial-resistance/about/index.html",
+    "word_count": 311
+  },
+  {
+    "filename": "cdc/asthma.txt",
+    "title": "Asthma",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/asthma/about/index.html",
+    "word_count": 323
+  },
+  {
+    "filename": "cdc/diabetes_basics.txt",
+    "title": "Diabetes Basics",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/diabetes/about/index.html",
+    "word_count": 509
+  },
+  {
+    "filename": "cdc/flu.txt",
+    "title": "Flu (Influenza)",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/flu/about/index.html",
+    "word_count": 419
+  },
+  {
+    "filename": "cdc/food_safety.txt",
+    "title": "Food Safety",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/food-safety/about/index.html",
+    "word_count": 328
+  },
+  {
+    "filename": "cdc/heart_disease.txt",
+    "title": "Heart Disease",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/heart-disease/about/index.html",
+    "word_count": 332
+  },
+  {
+    "filename": "cdc/high_blood_pressure.txt",
+    "title": "High Blood Pressure",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/high-blood-pressure/about/index.html",
+    "word_count": 478
+  },
+  {
+    "filename": "cdc/vaccines_immunization_basics.txt",
+    "title": "Vaccines and Immunization Basics",
+    "source_org": "CDC",
+    "source_org_full": "Centers for Disease Control and Prevention",
+    "url": "https://www.cdc.gov/vaccines/about/index.html",
+    "word_count": 362
+  },
+  {
+    "filename": "nih/depression.txt",
+    "title": "Depression",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.nimh.nih.gov/health/topics/depression",
+    "word_count": 413
+  },
+  {
+    "filename": "nih/diabetes_niddk.txt",
+    "title": "Diabetes",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.niddk.nih.gov/health-information/diabetes",
+    "word_count": 434
+  },
+  {
+    "filename": "nih/healthy_aging.txt",
+    "title": "Healthy Aging",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.nia.nih.gov/health/healthy-aging",
+    "word_count": 367
+  },
+  {
+    "filename": "nih/heart_healthy_living.txt",
+    "title": "Heart-Healthy Living",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.nhlbi.nih.gov/health/heart-healthy-living",
+    "word_count": 343
+  },
+  {
+    "filename": "nih/high_blood_pressure_nhlbi.txt",
+    "title": "High Blood Pressure",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.nhlbi.nih.gov/health/high-blood-pressure",
+    "word_count": 356
+  },
+  {
+    "filename": "nih/hiv_aids_niaid.txt",
+    "title": "HIV/AIDS",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.niaid.nih.gov/diseases-conditions/hiv-aids",
+    "word_count": 390
+  },
+  {
+    "filename": "nih/sleep_deprivation.txt",
+    "title": "Sleep Deprivation and Deficiency",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.nhlbi.nih.gov/health/sleep-deprivation",
+    "word_count": 385
+  },
+  {
+    "filename": "nih/what_is_cancer.txt",
+    "title": "What Is Cancer",
+    "source_org": "NIH",
+    "source_org_full": "National Institutes of Health",
+    "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
+    "word_count": 461
+  }
+]

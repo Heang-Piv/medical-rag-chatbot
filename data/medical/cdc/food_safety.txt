@@ -1,0 +1,24 @@
+Title: Food Safety
+Source: Centers for Disease Control and Prevention (CDC)
+URL: https://www.cdc.gov/food-safety/about/index.html
+Fetched: 2026-07-16
+
+Overview
+
+Food safety involves handling, preparing, and storing food in ways that best reduce the risk of foodborne illness. Each year, an estimated 48 million people in the United States get sick, 128,000 are hospitalized, and 3,000 die from foodborne diseases, according to CDC estimates. Common foodborne pathogens include Salmonella, Campylobacter, E. coli, Listeria, and norovirus.
+
+Symptoms of foodborne illness
+
+Symptoms of foodborne illness commonly include diarrhea, vomiting, stomach cramps, and fever, typically appearing anywhere from hours to weeks after eating contaminated food, depending on the pathogen involved. Certain groups, including young children, older adults, pregnant women, and people with weakened immune systems, are at higher risk of severe illness or complications from foodborne infections.
+
+Four steps to food safety
+
+CDC recommends four core steps to reduce the risk of foodborne illness at home: Clean - wash hands and surfaces often; Separate - keep raw meat, poultry, seafood, and eggs away from other foods to avoid cross-contamination; Cook - cook foods to a safe internal temperature, checked with a food thermometer; and Chill - refrigerate perishable food promptly, since bacteria can multiply rapidly at room temperature.
+
+High-risk foods and situations
+
+Certain foods carry a higher risk of contamination, including undercooked meat, poultry, and eggs, unpasteurized (raw) milk and juice, raw sprouts, and unwashed fruits and vegetables. Cross-contamination during food preparation, inadequate cooking temperatures, and improper cooling or holding of food are common causes of outbreaks.
+
+Prevention and response
+
+CDC works with state and local health departments, other federal agencies including the FDA and USDA, and international partners to detect and investigate foodborne disease outbreaks, identify their source, and issue public health advisories and food recalls when needed. Consumers can protect themselves by following the four core food safety steps, checking for recalls, and seeking medical care if they experience severe symptoms such as high fever, bloody diarrhea, prolonged vomiting, or signs of dehydration.

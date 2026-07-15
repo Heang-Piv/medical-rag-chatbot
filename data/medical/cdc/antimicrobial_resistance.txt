@@ -1,0 +1,24 @@
+Title: Antimicrobial Resistance
+Source: Centers for Disease Control and Prevention (CDC)
+URL: https://www.cdc.gov/antimicrobial-resistance/about/index.html
+Fetched: 2026-07-16
+
+Overview
+
+Antimicrobial resistance (AMR) happens when germs like bacteria and fungi develop the ability to defeat the drugs designed to kill them. This means the germs are not killed and continue to grow, causing infections that are harder or impossible to treat. Antibiotic resistance specifically refers to resistance that develops in bacteria.
+
+Why it matters
+
+Each year in the United States, millions of people get an antibiotic-resistant infection, and thousands die as a result. Resistant infections can require longer hospital stays, additional follow-up visits, costlier and more toxic medications, and in some cases result in permanent disability or death. Antimicrobial resistance is considered one of the top global public health and development threats.
+
+How resistance develops and spreads
+
+Resistance develops naturally through evolution as microbes are exposed to antimicrobial drugs, but the process is accelerated by the overuse and misuse of antibiotics in humans, animals, and agriculture. Resistant germs can spread between people, animals, and the environment (including through food and water), and can also spread between healthcare facilities and communities.
+
+Prevention
+
+Key strategies to slow the spread of antimicrobial resistance include using antibiotics only when necessary and as prescribed, completing prescribed courses of treatment appropriately, preventing infections in the first place through vaccination and good hygiene (including handwashing), and improving detection and tracking of resistant infections through public health surveillance. Healthcare providers play a central role through antibiotic stewardship programs, which promote the appropriate use of antimicrobials to preserve their effectiveness for future patients.
+
+CDC response
+
+CDC tracks antimicrobial resistance patterns across the country, supports state and local health departments in detecting and responding to outbreaks of resistant infections, and funds research into new diagnostics, treatments, and prevention strategies. CDC's Antibiotic Resistance Solutions Initiative supports a nationwide infrastructure to protect people from resistant infection threats.

@@ -1,0 +1,24 @@
+Title: Diabetes
+Source: National Institutes of Health - National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK)
+URL: https://www.niddk.nih.gov/health-information/diabetes
+Fetched: 2026-07-16
+
+Overview
+
+Diabetes is a disease that occurs when blood glucose, also called blood sugar, is too high. Blood glucose is the main source of energy for the body's cells and comes from the food eaten; insulin, a hormone made by the pancreas, helps glucose from food get into cells to be used for energy. When the body does not make enough insulin, or cannot use insulin well, glucose builds up in the blood instead of entering cells.
+
+Types of diabetes
+
+The main types of diabetes are type 1, type 2, gestational diabetes, and other, less common forms caused by specific genetic conditions, surgery, medications, infections, or other illnesses. Type 1 diabetes, most often diagnosed in children and young adults, occurs when the body does not make insulin because the immune system attacks and destroys the insulin-producing cells of the pancreas; people with type 1 diabetes need to take insulin every day. Type 2 diabetes, the most common type, occurs when the body does not use insulin well and cannot keep blood glucose at normal levels; it develops over many years and is usually diagnosed in adults, though it is increasingly diagnosed in children, teens, and young adults. Gestational diabetes develops in some women during pregnancy and usually resolves after the baby is born, but raises the risk of type 2 diabetes later in life for the mother and increases certain health risks for the baby.
+
+Prediabetes
+
+Prediabetes is a condition in which blood glucose levels are higher than normal but not high enough to be diagnosed as type 2 diabetes. Prediabetes raises the risk of developing type 2 diabetes, heart disease, and stroke, but weight loss, physical activity, and healthy eating can help delay or prevent progression to type 2 diabetes.
+
+Complications
+
+Over time, high blood glucose can damage the heart, blood vessels, eyes, kidneys, and nerves. Diabetes complications can include heart disease and stroke, kidney disease, vision loss and blindness, nerve damage that can lead to loss of sensation and, in severe cases, amputation, and increased susceptibility to other illnesses.
+
+Management
+
+Diabetes management includes monitoring blood glucose levels, following a healthy eating plan, staying physically active, taking prescribed medications (insulin for all people with type 1 diabetes and, often, oral medications or insulin for type 2 diabetes), and attending regular checkups to screen for and manage complications early. NIDDK supports research into new approaches for diabetes prevention, treatment, and eventual cures, including studies of insulin therapy, beta-cell biology, and lifestyle interventions.

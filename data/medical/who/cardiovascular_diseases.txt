@@ -1,0 +1,29 @@
+Title: Cardiovascular diseases (CVDs)
+Source: World Health Organization (WHO)
+URL: https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)
+Fetched: 2026-07-16
+Published: 31 July 2025
+
+Overview
+
+Cardiovascular diseases (CVDs) are a group of disorders of the heart and blood vessels, including coronary heart disease, cerebrovascular disease (stroke), rheumatic heart disease, and other conditions. Heart attacks and strokes are usually acute events caused mainly by a blockage that prevents blood from flowing to the heart or brain. The most common underlying cause is a build-up of fatty deposits on the inner walls of the blood vessels that supply the heart or brain (atherosclerosis).
+
+Global burden
+
+Cardiovascular diseases are the leading cause of death globally, accounting for an estimated 17.9 million deaths each year, representing roughly 32% of all global deaths. Of these deaths, most are due to heart attack and stroke, and more than three-quarters occur in low- and middle-income countries. Cardiovascular diseases account for the largest share of noncommunicable disease (NCD) deaths worldwide.
+
+Risk factors
+
+The most important behavioural risk factors for heart disease and stroke are unhealthy diet, physical inactivity, tobacco use, and harmful use of alcohol. The effects of these behavioural risk factors show up in individuals as raised blood pressure, raised blood glucose, raised blood lipids, and overweight and obesity; these are called intermediate risk factors and can be measured in primary care facilities. Underlying determinants of CVDs also include factors such as poverty, stress, and hereditary factors.
+
+Symptoms
+
+Symptoms of a heart attack can include pain or discomfort in the chest, arms, left shoulder, jaw, back; shortness of breath; nausea or vomiting; light-headedness or fainting; cold sweat and pallor. Symptoms of a stroke can include sudden weakness of the face, arm, or leg (often on one side of the body); sudden confusion, trouble speaking or understanding speech; sudden difficulty seeing in one or both eyes; sudden difficulty walking, dizziness, or loss of balance and coordination; and sudden severe headache with no known cause. People experiencing these symptoms should seek medical care immediately.
+
+Prevention
+
+At least 80% of premature heart attacks and strokes are considered preventable. Population-wide strategies to reduce CVD include comprehensive tobacco control policies, taxation to reduce intake of salt, sugar, and fat, building walking and cycling paths to increase physical activity, and policies to reduce harmful alcohol use. Individual-level prevention involves early detection and management of behavioural risk factors through primary health care, including counselling and, where needed, medicines for hypertension, diabetes, and high blood cholesterol.
+
+WHO response
+
+WHO leads the Global Hearts Initiative, launched with the U.S. CDC in 2016, which supports governments in strengthening prevention and control of cardiovascular disease through the HEARTS technical package covering healthy-lifestyle counselling, evidence-based treatment protocols, access to essential medicines and technology, risk-based management, team-based care, and monitoring systems.

@@ -1,0 +1,26 @@
+Title: Diabetes Basics
+Source: Centers for Disease Control and Prevention (CDC)
+URL: https://www.cdc.gov/diabetes/about/index.html
+Fetched: 2026-07-16
+
+Overview
+
+Diabetes is a chronic disease that affects how the body turns food into energy. The body breaks down most of the food eaten into sugar (glucose) and releases it into the bloodstream; when blood sugar rises, it signals the pancreas to release insulin, which acts like a key letting blood sugar into the body's cells for use as energy. With diabetes, the body does not make enough insulin or cannot use it as well as it should, so too much blood sugar stays in the bloodstream.
+
+There are three main types of diabetes: type 1, type 2, and gestational diabetes (diabetes during pregnancy).
+
+Type 1 diabetes is thought to be caused by an autoimmune reaction that stops the body from making insulin; people with type 1 diabetes must take insulin every day to survive. It can appear suddenly, in just a few weeks or months, and there is currently no known way to prevent it, though early detection can help avoid or delay symptoms and serious complications.
+
+Type 2 diabetes accounts for about 90% to 95% of all diagnosed diabetes cases. It usually develops in people 45 or older, but is increasingly diagnosed in children, teens, and young adults. In type 2 diabetes, cells do not respond normally to insulin (insulin resistance); the pancreas makes more insulin to compensate, but over time cannot keep up, and blood sugar rises. It can often be prevented or delayed through proven lifestyle changes such as losing weight if overweight, eating a healthy diet, and getting regular physical activity.
+
+Gestational diabetes develops in pregnant women who have never had diabetes before, and usually goes away after the baby is born; however, it increases the mother's risk of type 2 diabetes later in life, and the baby's risk of obesity and type 2 diabetes as a child or teen.
+
+Prediabetes is a condition in which blood sugar levels are higher than normal but not high enough for a type 2 diabetes diagnosis; it raises the risk of type 2 diabetes, heart disease, and stroke, but can often be reversed or delayed with lifestyle changes such as weight loss, healthy eating, and physical activity.
+
+Statistics and impact
+
+About 1 in 8 Americans has diabetes, and more than 2 in 5 U.S. adults have prediabetes, though about 8 in 10 people with prediabetes do not know they have it. Diabetes is the leading cause of kidney failure, lower-limb amputations, and adult blindness in the United States, and one of the most costly health conditions, accounting for about 25% of all U.S. health care spending.
+
+Management
+
+There is not yet a cure for diabetes, but losing weight, eating healthy food, and staying active can help a great deal. Other important steps include taking medicine as prescribed, getting diabetes self-management education and support, keeping regular health care appointments, and working with a diabetes educator for guidance on nutrition, blood sugar testing, and coping with the emotional side of living with the disease.

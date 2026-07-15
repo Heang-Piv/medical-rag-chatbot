@@ -1,0 +1,20 @@
+Title: Tuberculosis
+Source: World Health Organization (WHO)
+URL: https://www.who.int/news-room/fact-sheets/detail/tuberculosis
+Fetched: 2026-07-16
+
+Overview
+
+Tuberculosis (TB) is an infectious disease caused by the bacterium Mycobacterium tuberculosis, which most often affects the lungs. It spreads through the air when a person with active TB disease coughs, sneezes, speaks, or sings, releasing bacteria that others inhale. Not everyone exposed to TB bacteria becomes infected; the duration and proximity of exposure, the infectiousness of the person with TB, and the immune status of the exposed person all affect the likelihood of transmission. About a quarter of the global population is estimated to have been infected with TB bacteria at some point; only 5-10% of infected people will eventually develop TB disease and symptoms. People who are infected but not yet ill (latent TB infection) cannot transmit the disease. Certain environments facilitate transmission, particularly crowded and poorly ventilated spaces such as prisons, homeless shelters, refugee camps, and healthcare facilities. Social determinants such as poverty, overcrowded living conditions, and limited access to healthcare also contribute to the spread of TB.
+
+Diagnosis
+
+All persons with TB signs and symptoms are initially advised to use rapid molecular diagnostic tests. A tuberculin skin test (TST) or interferon-gamma release assay (IGRA) can also identify TB infection. Diagnosing multidrug-resistant and other drug-resistant forms of TB, as well as HIV-associated TB, can be complex and expensive; tuberculosis is also particularly difficult to diagnose in children.
+
+Treatment
+
+TB disease is usually treated with antibiotics and can be fatal without treatment. Both TB infection and active disease are treated with antibiotics taken daily for 4 to 6 months; stopping medication early or without medical advice is dangerous and can allow the bacteria to become drug-resistant. Multidrug-resistant TB (MDR-TB), caused by bacteria resistant to isoniazid and rifampicin (the two most effective first-line drugs), is treatable and curable using second-line drugs, which are more expensive and more toxic. Patients who become unresponsive to standard drugs require more toxic treatment with different medicines.
+
+Global burden
+
+An estimated 10.8 million people fell ill with TB worldwide in 2023, including 6.0 million men, 3.6 million women, and 1.3 million children. A total of 1.25 million people died from tuberculosis in 2023, including 161,000 people who also had HIV. TB has returned to being the world's leading cause of death from a single infectious agent, following three years in which it was surpassed by COVID-19; it was also the leading killer of people living with HIV and a major contributor to antimicrobial resistance. Multidrug-resistant TB remains a public health crisis and a health security threat, with only about 2 in 5 people with drug-resistant TB accessing treatment. TB is present in all countries and age groups, and mostly affects adults in their most productive years, though all age groups are at risk. TB is curable and preventable, and global efforts have saved an estimated 79 million lives since the year 2000. Ending the TB epidemic by 2030 is among the health targets of the United Nations Sustainable Development Goals.

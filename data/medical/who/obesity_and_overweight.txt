@@ -1,0 +1,35 @@
+Title: Obesity and overweight
+Source: World Health Organization (WHO)
+URL: https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight
+Fetched: 2026-07-16
+Published: 8 December 2025
+
+Key facts
+
+In 2022, 1 in 8 people in the world were living with obesity. Worldwide adult obesity has more than doubled since 1990, and adolescent obesity has quadrupled. In 2022, 2.5 billion adults were overweight, of whom 890 million were living with obesity. In 2022, 43% of adults aged 18 years and over were overweight and 16% were living with obesity. In 2024, 35 million children under the age of 5 were overweight. Over 390 million children and adolescents aged 5-19 years were overweight in 2022, including 160 million who were living with obesity.
+
+Overview
+
+Overweight is a condition of excessive fat deposits. Obesity is classified by WHO as a chronic, relapsing disease arising from complex interactions between genetics, neurobiology, eating behaviours, access to healthy diet, market forces, and the broader environment. A diagnosis of overweight or obesity is made by measuring people's weight and height and calculating body mass index (BMI): weight (kg) / height squared (m^2). For adults, overweight is a BMI greater than or equal to 25, and obesity is a BMI greater than or equal to 30. For children, age-adjusted growth reference standards are used instead of the flat adult thresholds.
+
+Causes
+
+Overweight and obesity result from an imbalance of energy intake (diet) and energy expenditure (physical activity). In most cases obesity is multifactorial, arising from environmental and psycho-social factors and genetic variants; in a smaller subgroup, single major factors such as medications, disease, immobilization, or a genetic syndrome can be identified. Key environmental drivers include limited availability of healthy, affordable food, lack of safe spaces for physical activity, and weak health-system responses to early weight gain.
+
+Common health consequences
+
+In 2021, higher-than-optimal BMI caused an estimated 3.7 million deaths from noncommunicable diseases (NCDs) such as cardiovascular diseases, diabetes, cancers, neurological disorders, chronic respiratory diseases, and digestive disorders. Overweight in childhood and adolescence is associated with greater risk and earlier onset of NCDs such as type 2 diabetes and cardiovascular disease, plus adverse psychosocial consequences including effects on school performance and quality of life. Children with obesity are likely to become adults with obesity and face a higher risk of developing NCDs in adulthood. The global economic cost of overweight and obesity is projected to reach US$3 trillion per year by 2030 and over US$18 trillion by 2060.
+
+Double burden of malnutrition
+
+Many low- and middle-income countries face a double burden of malnutrition: they continue to deal with infectious disease and undernutrition while also experiencing a rapid rise in obesity and related noncommunicable disease risk. It is common to find undernutrition and obesity co-existing within the same country, community, and even household, as children are exposed to high-fat, high-sugar, high-salt, energy-dense, micronutrient-poor foods that are cheap but low in nutrient quality.
+
+Prevention and management
+
+Overweight and obesity, and their related noncommunicable diseases, are largely preventable and manageable. Individual-level interventions across the life cycle include: appropriate weight gain during pregnancy; exclusive breastfeeding for the first 6 months and continued breastfeeding to 24 months or beyond; supporting healthy eating, physical activity, limited sedentary and screen time, and adequate sleep in children; limiting sugar-sweetened beverages and energy-dense foods; and regular physical activity for adults. Health practitioners are advised to assess weight and height at every visit, counsel on healthy diet and lifestyle, and when obesity is diagnosed, advise on management including diet, physical activity, and available therapeutic or surgical measures, while monitoring related risk factors such as blood glucose, lipids, and blood pressure.
+
+Because dietary and physical activity patterns are shaped heavily by environmental and societal conditions, WHO frames obesity prevention as a societal rather than purely individual responsibility, requiring structural, fiscal, and regulatory action on food environments alongside food-industry commitments to reduce fat, sugar, and salt content and restrict marketing of unhealthy food to children.
+
+WHO response
+
+WHO's Global Nutrition Targets aim to halt the rise in childhood overweight, extended through 2030 at the 2025 World Health Assembly. In 2022, the Seventy-fifth World Health Assembly endorsed the WHO Acceleration Plan to stop obesity. In December 2025, WHO published a guideline on the use of GLP-1 (glucagon-like peptide-1) therapies for treating obesity in adults, intended to support safe, equitable inclusion of pharmacological therapy within comprehensive, lifelong obesity chronic-care programmes rather than as a standalone solution.

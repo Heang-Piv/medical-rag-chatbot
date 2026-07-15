@@ -1,0 +1,26 @@
+Title: HIV
+Source: World Health Organization (WHO)
+URL: https://www.who.int/news-room/fact-sheets/detail/hiv-aids
+Fetched: 2026-07-16
+
+Overview
+
+HIV (human immunodeficiency virus) attacks the body's immune system, specifically CD4 cells (T cells), which help the immune system fight infections. If untreated, HIV reduces the number of these cells, making the body vulnerable to a range of infections and cancers that a healthy immune system could normally fight off. The most advanced stage of HIV infection is acquired immunodeficiency syndrome (AIDS), which can take years to develop if not treated, depending on the individual.
+
+HIV is transmitted through contact with certain body fluids from a person with HIV, most commonly during unprotected sex, through sharing needles or syringes, or from mother to child during pregnancy, childbirth, or breastfeeding. HIV cannot be transmitted through casual contact such as kissing, hugging, or sharing food.
+
+Global burden
+
+In 2024, an estimated 40.8 million people were living with HIV worldwide, with 31.6 million accessing antiretroviral therapy (ART). HIV has claimed an estimated 36.3 million lives to date since the start of the epidemic. Around 1.3 million people acquire HIV annually, meaning prevention remains a key part of the response. Pediatric HIV care is stalling, with only about 55% of children living with HIV accessing treatment, compared with about 78% of adults.
+
+Treatment
+
+There is no cure for HIV infection, but antiretroviral therapy (ART) controls the virus effectively, allowing people living with HIV to live long, healthy lives and to prevent transmission to others. ART involves taking a combination of HIV medicines daily, which suppresses the amount of virus in the blood (viral load) to undetectable levels. WHO guidance emphasizes that people living with HIV with a sustained undetectable viral load do not transmit HIV to sexual partners.
+
+Prevention
+
+Effective HIV prevention approaches include the correct and consistent use of condoms, voluntary medical male circumcision, pre-exposure prophylaxis (PrEP) for people at substantial risk of HIV, needle and syringe programmes for people who inject drugs, and prevention of mother-to-child transmission through ART during pregnancy and breastfeeding. Regular HIV testing is central to both prevention and early linkage to treatment.
+
+WHO response
+
+WHO works with countries and partners such as UNAIDS toward global targets to end AIDS as a public health threat. Global goals include expanding access to testing and treatment, closing the pediatric treatment gap, and reducing new infections, particularly among key populations and in regions with high HIV burden.

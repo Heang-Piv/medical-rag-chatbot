@@ -1,0 +1,28 @@
+Title: HIV/AIDS
+Source: National Institutes of Health - National Institute of Allergy and Infectious Diseases (NIAID)
+URL: https://www.niaid.nih.gov/diseases-conditions/hiv-aids
+Fetched: 2026-07-16
+
+Overview
+
+HIV (human immunodeficiency virus) is a virus that attacks the body's immune system, specifically CD4 cells (a type of white blood cell also called T cells), which are essential for fighting off infections. If left untreated, HIV reduces the number and function of CD4 cells, making the body increasingly vulnerable to opportunistic infections and certain cancers. Without treatment, HIV infection can advance to AIDS (acquired immunodeficiency syndrome), the most advanced stage of the disease.
+
+Transmission
+
+HIV is transmitted through specific body fluids, including blood, semen, vaginal and rectal fluids, and breast milk, most commonly through unprotected sexual contact, sharing needles or syringes for injection drug use, or from a mother to her child during pregnancy, childbirth, or breastfeeding. HIV is not spread through casual contact such as hugging, shaking hands, sharing food or drink, or through the air or water.
+
+Diagnosis
+
+HIV is diagnosed through blood or oral fluid tests that detect antibodies to the virus, HIV antigens, or the virus itself. Early diagnosis through regular testing is important, since starting treatment promptly after diagnosis leads to better long-term health outcomes and prevents transmission to others.
+
+Treatment
+
+There is currently no cure for HIV, but antiretroviral therapy (ART), a combination of HIV medicines taken daily, can control the virus effectively. ART works by lowering the amount of HIV in the blood (viral load), often to undetectable levels, which allows the immune system to recover and stay strong, and prevents transmission of the virus to sexual partners when viral suppression is sustained. People with HIV who take ART as prescribed can live long, healthy lives.
+
+Prevention
+
+HIV prevention strategies include the correct and consistent use of condoms, pre-exposure prophylaxis (PrEP), medication taken by HIV-negative people at substantial risk to prevent infection, post-exposure prophylaxis (PEP) after a potential exposure, needle exchange programs for people who inject drugs, and treatment as prevention, since people with HIV who maintain an undetectable viral load through ART do not transmit the virus sexually.
+
+Research
+
+NIAID supports research into HIV prevention, treatment, and cure strategies, including the development of vaccines, long-acting antiretroviral formulations, and a deeper understanding of how the virus interacts with the immune system, working toward the long-term goal of ending the HIV epidemic.

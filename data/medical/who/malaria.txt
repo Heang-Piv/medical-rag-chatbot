@@ -1,0 +1,29 @@
+Title: Malaria
+Source: World Health Organization (WHO)
+URL: https://www.who.int/news-room/fact-sheets/detail/malaria
+Fetched: 2026-07-16
+Published: 4 December 2025
+
+Overview
+
+Malaria is a mosquito-borne infectious disease caused by parasites of the genus Plasmodium, spread to people through the bites of infected female Anopheles mosquitoes. Five parasite species cause malaria in humans; Plasmodium falciparum is the most deadly. Malaria does not spread directly from person to person through casual contact; it is not a contagious disease in that sense, though it can rarely be transmitted from mother to unborn child, through blood transfusions, or by sharing needles.
+
+Symptoms
+
+Symptoms usually appear 10-15 days after the infective mosquito bite and include fever, headache, and chills. If left untreated, especially with P. falciparum, malaria can progress to severe illness and death within 24 hours.
+
+Who is at risk
+
+Populations at considerably higher risk of contracting malaria and developing severe disease include infants, children under 5 years of age, pregnant women, patients with HIV/AIDS, non-immune migrants, mobile populations, and travellers from non-endemic areas. Most malaria deaths in Africa occur in young children, while in areas with lower transmission and less acquired immunity, all age groups remain at risk.
+
+Diagnosis and treatment
+
+WHO recommends that all suspected malaria cases be confirmed using parasite-based diagnostic testing, either microscopy or a rapid diagnostic test, before treatment. Early diagnosis and treatment reduces disease, prevents deaths, and contributes to reducing transmission. Artemisinin-based combination therapies (ACTs) are the most effective treatment for P. falciparum malaria; artemisinin should always be used in combination, not as monotherapy, to limit the spread of drug resistance. Emerging partial resistance to artemisinin has been confirmed or suspected in at least 8 African countries.
+
+Prevention
+
+Vector control is a vital component of malaria control and elimination, with insecticide-treated nets (ITNs) and indoor residual spraying (IRS) as the two core interventions. Preventive chemotherapy strategies include seasonal and perennial malaria chemoprevention and intermittent preventive treatment during pregnancy. Since October 2021, WHO has recommended broad use of the RTS,S/AS01 malaria vaccine, and in October 2023 recommended a second vaccine, R21/Matrix-M, for children in areas of moderate to high P. falciparum transmission; vaccines are now being rolled out through routine childhood immunization programmes across Africa alongside bed nets and chemoprophylaxis for maximum impact.
+
+Global burden
+
+An estimated 282 million malaria cases and 610,000 deaths occurred in 2024. The WHO African Region continues to bear the greatest burden, with 11 countries accounting for about two-thirds of global cases and deaths. Since 2000, an estimated 2.3 billion malaria cases and 14 million deaths have been averted worldwide, including roughly 1 million lives saved in 2024 alone, though progress on reducing the mortality rate remains off track and progress has stalled or reversed in some countries in recent years.

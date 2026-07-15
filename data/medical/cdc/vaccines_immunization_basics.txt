@@ -1,0 +1,24 @@
+Title: Vaccines and Immunization Basics
+Source: Centers for Disease Control and Prevention (CDC)
+URL: https://www.cdc.gov/vaccines/about/index.html
+Fetched: 2026-07-16
+
+Overview
+
+Vaccines help the body's immune system recognize and fight specific germs before a person is exposed to the actual disease, without causing the illness itself. Most vaccines work by introducing a harmless piece or weakened/inactivated version of a germ, or instructions for making a piece of it, which trains the immune system to produce antibodies and immune memory. If the vaccinated person later encounters the real germ, their immune system can respond quickly, often preventing illness or reducing its severity.
+
+Why vaccination matters
+
+Vaccines have dramatically reduced or eliminated many diseases that once caused widespread illness, disability, and death, including smallpox (eradicated globally), polio (eliminated in most of the world), and diseases such as measles, mumps, rubella, and diphtheria that were once common causes of childhood illness and death. Vaccination protects not only the person vaccinated but also helps protect people around them, including those who cannot be vaccinated themselves due to age or medical conditions, through community (herd) immunity.
+
+Recommended immunization schedules
+
+CDC publishes recommended immunization schedules for children, adolescents, and adults, developed with input from expert advisory committees. These schedules specify which vaccines are recommended at each age, and additional guidance exists for people with certain health conditions, occupations, or travel plans that put them at higher risk for specific diseases.
+
+Vaccine safety
+
+Vaccines approved for use in the United States go through extensive testing for safety and effectiveness before licensing, and continue to be monitored afterward through systems that track and investigate any reports of adverse events. Like all medical products, vaccines can cause side effects, which are typically mild and temporary (such as soreness at the injection site, low-grade fever, or fatigue); serious side effects are rare. The benefits of vaccination in preventing serious infectious disease are, for the overwhelming majority of people, considered to substantially outweigh the risks of side effects.
+
+CDC's role
+
+CDC works with health care providers, state and local health departments, and international partners to track vaccination coverage, monitor disease trends, respond to outbreaks of vaccine-preventable disease, and update vaccine recommendations as new evidence becomes available.

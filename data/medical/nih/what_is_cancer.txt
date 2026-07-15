@@ -1,0 +1,24 @@
+Title: What Is Cancer
+Source: National Institutes of Health - National Cancer Institute (NCI)
+URL: https://www.cancer.gov/about-cancer/understanding/what-is-cancer
+Fetched: 2026-07-16
+
+Overview
+
+Cancer is the name given to a collection of related diseases in which some of the body's cells begin to divide without stopping and spread into surrounding tissues. Normally, human cells grow and divide to form new cells as the body needs them; when cells grow old or become damaged, they die, and new cells take their place. Cancer begins when genetic changes disrupt this orderly process, so that old or damaged cells survive when they should die, and new cells form when they are not needed; these extra cells can divide without stopping and may form growths called tumors.
+
+Cancer versus benign tumors
+
+Many, but not all, cancers form solid tumors made of tissue masses. Cancerous (malignant) tumors spread into, or invade, nearby tissues and can travel to distant places in the body to form new tumors, a process called metastasis. Malignant tumors may also be called malignancies. Benign tumors, by contrast, do not spread into, or invade, nearby tissues; benign tumors can sometimes be quite large, but when removed, they usually do not grow back, whereas malignant tumors sometimes do.
+
+How cancer develops
+
+Cancer is a genetic disease, caused by changes to genes that control the way cells function, especially how they grow and divide. Genetic changes that cause cancer can occur because of errors that happen as cells divide, damage to DNA caused by harmful substances in the environment such as chemicals in tobacco smoke or ultraviolet rays from the sun, or be inherited from a parent. Cancer-causing genetic changes commonly affect three main types of genes: proto-oncogenes involved in normal cell growth and division that can become cancer-causing oncogenes if altered; tumor suppressor genes that normally control cell growth and can allow cancer to develop when they lose function; and DNA repair genes that fix damaged DNA, whose loss of function can allow additional genetic changes to accumulate.
+
+Diagnosis and treatment
+
+Cancer is typically diagnosed through a combination of physical exams, imaging tests, laboratory tests, and biopsy (examining a tissue sample under a microscope). Treatment options depend on the type and stage of cancer and may include surgery, radiation therapy, chemotherapy, immunotherapy, targeted therapy, or hormone therapy, often used in combination. Advances in understanding the genetic and molecular basis of cancer have led to more precise, individualized treatment approaches in recent years.
+
+Prevention and risk reduction
+
+While not all cancers can be prevented, certain lifestyle and environmental factors are known to influence risk, including tobacco use, excessive alcohol consumption, unhealthy diet, physical inactivity, obesity, and exposure to ultraviolet radiation or certain infections. Screening tests can help detect some cancers early, when they may be easier to treat successfully.
