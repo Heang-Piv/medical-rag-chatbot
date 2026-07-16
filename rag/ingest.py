@@ -13,6 +13,7 @@ so chunks only break mid-sentence when a single sentence exceeds chunk_size on
 its own.
 """
 
+import io
 import json
 import os
 import re
@@ -140,6 +141,25 @@ def save_uploaded_file(folder: str, filename: str, content: bytes) -> None:
     os.makedirs(folder, exist_ok=True)
     with open(os.path.join(folder, filename), "wb") as f:
         f.write(content)
+
+
+def extract_text_from_bytes(filename: str, content: bytes) -> str:
+    """Extract plain text from raw upload bytes, dispatching on file extension.
+
+    Used to run the upload relevance gate (rag/embed_store.domain_relevance_score)
+    before a file is written to disk via save_uploaded_file() — a document
+    that fails the gate is never saved. Returns "" for an unreadable PDF
+    rather than raising, matching load_documents()'s skip-with-warning
+    behavior for corrupted files.
+    """
+    ext = os.path.splitext(filename)[1].lower()
+    if ext == ".pdf":
+        try:
+            reader = PdfReader(io.BytesIO(content))
+            return "\n".join(page.extract_text() or "" for page in reader.pages).strip()
+        except Exception:
+            return ""
+    return _strip_header(content.decode("utf-8", errors="ignore"))
 
 
 def _word_count(text: str) -> int:

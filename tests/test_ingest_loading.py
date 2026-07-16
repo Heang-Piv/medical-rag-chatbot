@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from rag.ingest import load_documents, save_uploaded_file
+from rag.ingest import load_documents, save_uploaded_file, extract_text_from_bytes
 
 
 def test_load_documents_skips_corrupted_pdf_instead_of_crashing(tmp_path, caplog) -> None:
@@ -55,3 +55,17 @@ def test_save_uploaded_file_saved_document_is_then_loadable(tmp_path) -> None:
     assert len(docs) == 1
     assert docs[0]["title"] == "New Doc"
     assert docs[0]["source_org"] is None  # not a WHO/CDC/NIH subfolder
+
+
+def test_extract_text_from_bytes_reads_txt() -> None:
+    text = extract_text_from_bytes("note.txt", b"Some plain text content.")
+    assert text == "Some plain text content."
+
+
+def test_extract_text_from_bytes_strips_header_like_load_documents() -> None:
+    content = b"Title: Sample\nSource: WHO\n\nActual body text here."
+    assert extract_text_from_bytes("note.md", content) == "Actual body text here."
+
+
+def test_extract_text_from_bytes_returns_empty_for_unreadable_pdf() -> None:
+    assert extract_text_from_bytes("broken.pdf", b"not a real pdf file") == ""

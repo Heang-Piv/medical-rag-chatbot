@@ -2,7 +2,7 @@
 
 import pytest
 
-from rag.embed_store import VectorStore
+from rag.embed_store import VectorStore, domain_relevance_score
 from rag.ingest import Chunk
 
 CHUNKS = [
@@ -62,3 +62,24 @@ def test_rebuild_replaces_prior_index(tmp_path) -> None:
     s.build(CHUNKS)
     s.build(CHUNKS[:1])
     assert s.count() == 1
+
+
+# --- domain_relevance_score: upload relevance gate ---
+
+def test_domain_relevance_score_higher_for_medical_text_than_unrelated_text() -> None:
+    medical_score = domain_relevance_score(
+        "Tuberculosis (TB) is caused by bacteria that most often affect the lungs. "
+        "It is spread through the air when infected people cough or sneeze. Symptoms "
+        "include a chronic cough, fever, night sweats, and weight loss. TB is treatable "
+        "with a course of antibiotics prescribed by a doctor."
+    )
+    unrelated_score = domain_relevance_score(
+        "Preheat the oven to 350F. Mix flour, sugar, and butter until smooth, then "
+        "bake the cake for 20 minutes until golden brown on top."
+    )
+    assert medical_score > unrelated_score
+
+
+def test_domain_relevance_score_is_bounded() -> None:
+    score = domain_relevance_score("Diabetes is a chronic disease affecting blood sugar.")
+    assert -1.0 <= score <= 1.0

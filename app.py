@@ -26,8 +26,14 @@ except Exception:
     pass
 
 from config import config
-from rag.ingest import load_documents, build_chunk_records, save_uploaded_file, MAX_UPLOAD_BYTES
-from rag.embed_store import VectorStore
+from rag.ingest import (
+    load_documents,
+    build_chunk_records,
+    save_uploaded_file,
+    extract_text_from_bytes,
+    MAX_UPLOAD_BYTES,
+)
+from rag.embed_store import VectorStore, domain_relevance_score
 from rag.retriever import explain_chunk, retrieve
 from rag.generate import capability_answer, confidence_level, detect_intent, generate_answer, GREETING_RESPONSE
 from rag.utils import get_logger
@@ -120,8 +126,10 @@ with st.sidebar:
 
     st.subheader("Add documents")
     st.caption(
-        "Uploaded files are added to the same index but are not vetted WHO/CDC/NIH "
-        "sources — treat answers grounded in them accordingly."
+        "Uploads are automatically checked for medical/health relevance (semantic "
+        "similarity to the existing corpus) before being added — off-topic files are "
+        "rejected. Accepted uploads still aren't vetted WHO/CDC/NIH sources; treat "
+        "answers grounded in them accordingly."
     )
     uploaded_files = st.file_uploader(
         "Upload .txt / .md / .pdf files",
@@ -134,14 +142,27 @@ with st.sidebar:
     for uploaded in uploaded_files or []:
         if uploaded.name in st.session_state.saved_uploads:
             continue
-        try:
-            save_uploaded_file(
-                os.path.join(config.data_folder, UPLOAD_SUBFOLDER), uploaded.name, uploaded.getvalue()
+        # Marked as seen up front (success or not) so a rejected/oversized
+        # file isn't re-embedded and re-checked on every later rerun (e.g.
+        # moving a slider) for as long as it sits in the uploader widget.
+        st.session_state.saved_uploads.add(uploaded.name)
+        content = uploaded.getvalue()
+        if len(content) > MAX_UPLOAD_BYTES:
+            st.error(f"'{uploaded.name}' is over the {MAX_UPLOAD_BYTES / (1024 * 1024):.0f} MB limit — not added.")
+            continue
+        text = extract_text_from_bytes(uploaded.name, content)
+        if not text.strip():
+            st.error(f"'{uploaded.name}' couldn't be read (empty or unreadable file) — not added.")
+            continue
+        score = domain_relevance_score(text)
+        if score < config.upload_relevance_threshold:
+            st.error(
+                f"'{uploaded.name}' doesn't look medical/health-related "
+                f"(relevance {score:.2f}, needs ≥{config.upload_relevance_threshold:.2f}) — not added."
             )
-            st.session_state.saved_uploads.add(uploaded.name)
-            st.success(f"Saved '{uploaded.name}'. Click Rebuild index to include it.")
-        except ValueError as e:
-            st.error(str(e))
+            continue
+        save_uploaded_file(os.path.join(config.data_folder, UPLOAD_SUBFOLDER), uploaded.name, content)
+        st.success(f"Saved '{uploaded.name}' (relevance {score:.2f}). Click Rebuild index to include it.")
 
     if st.button("Rebuild index", icon=":material/refresh:",
                  help="Re-chunks and re-embeds every document using the settings above."):
@@ -177,13 +198,9 @@ with search_tab:
         intent = detect_intent(query)
 
         if intent == "greeting":
-            st.subheader("Answer")
-            st.write(GREETING_RESPONSE)
             st.session_state.last_search = {"query": query, "intent": intent}
         elif intent == "capability":
             logger.info("Handled as capability query, skipped retrieval")
-            st.subheader("Answer")
-            st.write(capability_answer(docs))
             st.session_state.last_search = {"query": query, "intent": intent}
         else:
             try:
@@ -193,33 +210,52 @@ with search_tab:
                 logger.exception("Search failed for query: %r", query)
                 st.error("Something went wrong while processing your question. Please try again.")
             else:
-                st.subheader("Answer")
-                st.write(answer)
-
-                confidence = confidence_level(retrieved)
-                if confidence:
-                    _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
-
-                st.subheader("Sources")
-                if retrieved:
-                    for chunk, score in retrieved:
-                        with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
-                            st.write(chunk.text)
-                            st.caption(explain_chunk(query, chunk))
-                else:
-                    st.caption("No sources cleared the similarity threshold for this query.")
-
                 # Recorded here (not in rag/generate.py) since this is purely a UI
-                # display concern for the Evaluation tab below, not RAG pipeline logic.
+                # display concern, not RAG pipeline logic.
                 st.session_state.last_search = {
                     "query": query,
                     "intent": intent,
                     "mode": mode,
                     "top_k": top_k,
                     "answer": answer,
-                    "confidence": confidence,
+                    "confidence": confidence_level(retrieved),
                     "retrieved": retrieved,
                 }
+
+    # Rendered from session_state, not the `query` variable above: st.chat_input
+    # always clears itself right after submission, and any later widget
+    # interaction anywhere on the page (e.g. a sidebar slider) reruns the whole
+    # script with query back to None. Reading from session_state is what keeps
+    # the last question and answer visible instead of disappearing on the next
+    # rerun.
+    last_search = st.session_state.get("last_search")
+    if not last_search:
+        st.caption("Ask a question below to see the answer here.")
+    else:
+        st.subheader("Question")
+        st.write(last_search["query"])
+        st.subheader("Answer")
+
+        if last_search["intent"] == "greeting":
+            st.write(GREETING_RESPONSE)
+        elif last_search["intent"] == "capability":
+            st.write(capability_answer(docs))
+        else:
+            st.write(last_search["answer"])
+
+            confidence = last_search["confidence"]
+            if confidence:
+                _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
+
+            st.subheader("Sources")
+            retrieved = last_search["retrieved"]
+            if retrieved:
+                for chunk, score in retrieved:
+                    with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
+                        st.write(chunk.text)
+                        st.caption(explain_chunk(last_search["query"], chunk))
+            else:
+                st.caption("No sources cleared the similarity threshold for this query.")
 
 with eval_tab:
     st.subheader("Evaluation of your last question")

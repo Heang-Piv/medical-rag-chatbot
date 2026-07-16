@@ -40,6 +40,13 @@ class Config:
     top_k_default: int = _get_int("TOP_K_DEFAULT", 4)
     similarity_threshold: float = _get_float("SIMILARITY_THRESHOLD", 0.5)
 
+    # --- Upload domain gate ---
+    # Minimum rag.embed_store.domain_relevance_score() an uploaded document
+    # must reach to be indexed, so the corpus stays medical/health content
+    # rather than whatever a user happens to upload. Calibrated against this
+    # project's real corpus (see domain_relevance_score's docstring).
+    upload_relevance_threshold: float = _get_float("UPLOAD_RELEVANCE_THRESHOLD", 0.58)
+
     # --- LLM generation ---
     llm_provider: str = os.environ.get("LLM_PROVIDER", "anthropic")  # anthropic | openai
     llm_model: str = os.environ.get("LLM_MODEL", "claude-sonnet-4-6")

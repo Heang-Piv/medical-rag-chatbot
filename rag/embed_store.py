@@ -32,12 +32,59 @@ _COLLECTION_METADATA = {"hnsw:space": "cosine"}
 # out as necessary for good retrieval quality, and it costs nothing to add.
 _QUERY_INSTRUCTION = "Represent this sentence for searching relevant passages: "
 
+# Fixed reference set for the upload domain gate (see domain_relevance_score
+# below) — short descriptions of what medical/health content looks like,
+# spanning disease, treatment, public health, anatomy, and mental health so a
+# reasonably wide range of real medical documents lands near at least one of
+# them.
+_DOMAIN_REFERENCE_SENTENCES = [
+    "This document describes a disease, illness, or medical condition, including its causes, symptoms, or how it is diagnosed.",
+    "This document explains a medical treatment, therapy, medication, dosage, or clinical procedure.",
+    "This document provides public health guidance, disease prevention advice, or vaccination information.",
+    "This document discusses human anatomy, physiology, or how a part of the body functions.",
+    "This document covers a health condition's risk factors, complications, or long-term outcomes.",
+    "This document is about a virus, bacteria, infection, or how a disease spreads between people.",
+    "This document discusses mental health, psychological conditions, or emotional well-being.",
+    "This document provides nutrition or lifestyle guidance related to preventing disease.",
+    "This document describes a medical test, diagnostic procedure, or screening for a health condition.",
+    "This document is published or reviewed by a health organization such as WHO, CDC, or NIH.",
+]
+
 
 @lru_cache(maxsize=1)
 def _load_model(model_name: str) -> SentenceTransformer:
     """Load and cache the embedding model so repeated VectorStore instances
     (e.g. across Streamlit reruns or tests) don't reload it from disk."""
     return SentenceTransformer(model_name)
+
+
+@lru_cache(maxsize=1)
+def _domain_reference_vectors(model_name: str):
+    """Embed _DOMAIN_REFERENCE_SENTENCES once per model, cached like the
+    model itself so re-checking uploads across Streamlit reruns is cheap."""
+    return _load_model(model_name).encode(_DOMAIN_REFERENCE_SENTENCES, normalize_embeddings=True)
+
+
+def domain_relevance_score(text: str) -> float:
+    """Cosine similarity (0-1) between `text` and the closest of a fixed set
+    of "this is medical/health content" reference sentences.
+
+    This is the upload-time counterpart to Guard 1's retrieval threshold:
+    same local embedding model, same cosine-similarity technique, just
+    compared against a domain reference instead of a live query. No LLM
+    call, no external API, no extra cost — reuses the model already loaded
+    for indexing/retrieval.
+
+    Calibrated against this project's real corpus: full WHO/CDC/NIH
+    documents scored 0.60-0.76, while unrelated reference text (course
+    material) scored 0.48-0.58 — see config.upload_relevance_threshold.
+    Like Guard 1, this is a threshold-based heuristic, not a classifier: very
+    short snippets embed noisily and can land near the boundary either way.
+    """
+    model = _load_model(config.embedding_model)
+    ref_vecs = _domain_reference_vectors(config.embedding_model)
+    vec = model.encode(text[:2000], normalize_embeddings=True)
+    return float((ref_vecs @ vec).max())
 
 
 def _chunk_metadata(chunk: Chunk) -> dict:
