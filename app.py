@@ -115,9 +115,11 @@ with st.sidebar:
 
     st.divider()
     st.subheader("Chunking & index")
+    st.caption(":material/info: Dragging these sliders does **nothing by itself** — they only take "
+               "effect once you click **Rebuild index** below.")
     chunk_size = st.slider(
         "Chunk size (tokens)", min_value=50, max_value=800, value=config.chunk_size_tokens, step=10,
-        help="Words per chunk. Changing this has no effect until you click Rebuild index below.",
+        help="Words per chunk.",
     )
     chunk_overlap = st.slider(
         "Chunk overlap (tokens)", min_value=0, max_value=300, value=config.chunk_overlap_tokens, step=10,
@@ -179,8 +181,20 @@ with st.sidebar:
                 logger.exception("Manual index rebuild failed")
                 st.error("Rebuild failed. Check the logs for details.")
             else:
+                avg_words = sum(len(c.text.split()) for c in rebuild_chunks) / len(rebuild_chunks) if rebuild_chunks else 0
+                # Stored in session_state (not shown inline here) because the
+                # rerun below replaces this whole script execution — an
+                # st.success() written here would never be seen.
+                st.session_state.rebuild_info = (
+                    f"Rebuilt with chunk_size={chunk_size}, overlap={chunk_overlap} -> "
+                    f"{len(rebuild_chunks)} chunks (avg {avg_words:.0f} words/chunk)."
+                )
                 load_store.clear()
                 st.rerun()
+
+    rebuild_info = st.session_state.get("rebuild_info")
+    if rebuild_info:
+        st.success(rebuild_info)
 
 search_tab, eval_tab = st.tabs(["Search", "Evaluation"])
 
