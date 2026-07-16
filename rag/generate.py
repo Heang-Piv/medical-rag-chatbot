@@ -6,7 +6,9 @@ Two modes are provided:
   together the retrieved chunks so you can verify retrieval quality before wiring
   up an LLM.
 - "llm": passes the grounded prompt (rag/prompt.py) to the configured provider
-  (config.llm_provider: anthropic | openai) and returns its answer.
+  (config.llm_provider: anthropic | openai) and returns its answer. The
+  "openai" branch also works against any OpenAI-compatible endpoint via
+  config.openai_base_url (e.g. NVIDIA's free-tier catalog).
 
 Guard 1 (retrieval requirement) is enforced in generate_answer(): if nothing
 was retrieved, neither mode is even attempted.
@@ -66,8 +68,13 @@ def _anthropic_answer(system_prompt: str, user_message: str) -> str:
 
 
 def _openai_answer(system_prompt: str, user_message: str) -> str:
-    """Call OpenAI's Chat Completions API and return the grounded answer text."""
-    client = openai.OpenAI(api_key=config.openai_api_key)
+    """Call an OpenAI-compatible Chat Completions API and return the answer text.
+
+    config.openai_base_url lets this target any OpenAI-compatible endpoint
+    (e.g. NVIDIA's free-tier catalog) instead of OpenAI's own API — same SDK
+    and call shape, just a different host, model name, and key.
+    """
+    client = openai.OpenAI(api_key=config.openai_api_key, base_url=config.openai_base_url or None)
     try:
         response = client.chat.completions.create(
             model=config.llm_model,

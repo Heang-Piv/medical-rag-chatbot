@@ -46,6 +46,12 @@ class Config:
     llm_temperature: float = _get_float("LLM_TEMPERATURE", 0.0)
     anthropic_api_key: str = os.environ.get("ANTHROPIC_API_KEY", "")
     openai_api_key: str = os.environ.get("OPENAI_API_KEY", "")
+    # Empty = OpenAI's own API. Override to point the same OpenAI-SDK call at
+    # any OpenAI-compatible endpoint instead — e.g. NVIDIA's free-tier model
+    # catalog at https://integrate.api.nvidia.com/v1 (set LLM_MODEL to a
+    # model it hosts, e.g. "openai/gpt-oss-120b", and OPENAI_API_KEY to your
+    # NVIDIA key).
+    openai_base_url: str = os.environ.get("OPENAI_BASE_URL", "")
 
     # --- Logging ---
     log_level: str = os.environ.get("LOG_LEVEL", "INFO")

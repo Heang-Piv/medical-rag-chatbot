@@ -24,6 +24,7 @@ def _fake_config(**overrides) -> SimpleNamespace:
         llm_provider="anthropic",
         anthropic_api_key="",
         openai_api_key="",
+        openai_base_url="",
         llm_model="claude-sonnet-4-6",
         llm_temperature=0.0,
     )
@@ -59,6 +60,41 @@ class _FakeAnthropicMessages:
 class _FakeAnthropicClient:
     def __init__(self, messages: _FakeAnthropicMessages):
         self.messages = messages
+
+
+class _FakeOpenAIMessage:
+    def __init__(self, content: str):
+        self.content = content
+
+
+class _FakeOpenAIResponse:
+    def __init__(self, content: str):
+        self.choices = [SimpleNamespace(message=_FakeOpenAIMessage(content))]
+
+
+class _FakeOpenAICompletions:
+    def __init__(self, response=None, error=None):
+        self._response = response
+        self._error = error
+        self.last_call_kwargs = None
+
+    def create(self, **kwargs):
+        self.last_call_kwargs = kwargs
+        if self._error:
+            raise self._error
+        return self._response
+
+
+class _FakeOpenAIClient:
+    def __init__(self, completions: _FakeOpenAICompletions):
+        self.chat = SimpleNamespace(completions=completions)
+
+
+def _openai_client_factory(fake_completions: _FakeOpenAICompletions, captured: dict):
+    def factory(**kwargs):
+        captured.update(kwargs)
+        return _FakeOpenAIClient(fake_completions)
+    return factory
 
 
 # --- Guard 1: refusal when nothing retrieved ---
@@ -154,6 +190,45 @@ def test_anthropic_answer_handles_connection_error_gracefully(monkeypatch) -> No
     answer = llm_answer("q", [(CHUNK, 0.9)])
     assert "temporarily unavailable" in answer
     assert "Traceback" not in answer  # never expose a stack trace
+
+
+# --- llm_answer (openai provider): default vs. OpenAI-compatible base_url ---
+
+def test_openai_answer_uses_default_base_url_when_not_configured(monkeypatch) -> None:
+    fake_completions = _FakeOpenAICompletions(response=_FakeOpenAIResponse("Answer via OpenAI."))
+    captured: dict = {}
+    monkeypatch.setattr(
+        "rag.generate.config",
+        _fake_config(llm_provider="openai", openai_api_key="test-key"),
+    )
+    monkeypatch.setattr("rag.generate.openai.OpenAI", _openai_client_factory(fake_completions, captured))
+
+    answer = llm_answer("What is in the test doc?", [(CHUNK, 0.9)])
+
+    assert answer == "Answer via OpenAI."
+    assert captured["base_url"] is None  # no override -> real OpenAI endpoint
+
+
+def test_openai_answer_uses_configured_base_url_for_compatible_endpoint(monkeypatch) -> None:
+    fake_completions = _FakeOpenAICompletions(response=_FakeOpenAIResponse("Answer via NVIDIA."))
+    captured: dict = {}
+    monkeypatch.setattr(
+        "rag.generate.config",
+        _fake_config(
+            llm_provider="openai",
+            openai_api_key="nvidia-key",
+            openai_base_url="https://integrate.api.nvidia.com/v1",
+            llm_model="openai/gpt-oss-120b",
+        ),
+    )
+    monkeypatch.setattr("rag.generate.openai.OpenAI", _openai_client_factory(fake_completions, captured))
+
+    answer = llm_answer("q", [(CHUNK, 0.9)])
+
+    assert answer == "Answer via NVIDIA."
+    assert captured["base_url"] == "https://integrate.api.nvidia.com/v1"
+    assert captured["api_key"] == "nvidia-key"
+    assert fake_completions.last_call_kwargs["model"] == "openai/gpt-oss-120b"
 
 
 # --- confidence_level: Guard 4, deterministic ---
