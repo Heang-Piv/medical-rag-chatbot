@@ -179,10 +179,12 @@ with search_tab:
         if intent == "greeting":
             st.subheader("Answer")
             st.write(GREETING_RESPONSE)
+            st.session_state.last_search = {"query": query, "intent": intent}
         elif intent == "capability":
             logger.info("Handled as capability query, skipped retrieval")
             st.subheader("Answer")
             st.write(capability_answer(docs))
+            st.session_state.last_search = {"query": query, "intent": intent}
         else:
             try:
                 retrieved = retrieve(store, query, top_k=top_k)
@@ -207,12 +209,65 @@ with search_tab:
                 else:
                     st.caption("No sources cleared the similarity threshold for this query.")
 
+                # Recorded here (not in rag/generate.py) since this is purely a UI
+                # display concern for the Evaluation tab below, not RAG pipeline logic.
+                st.session_state.last_search = {
+                    "query": query,
+                    "intent": intent,
+                    "mode": mode,
+                    "top_k": top_k,
+                    "answer": answer,
+                    "confidence": confidence,
+                    "retrieved": retrieved,
+                }
+
 with eval_tab:
-    st.subheader("Retrieval & Generation Evaluation")
+    st.subheader("Evaluation of your last question")
+    last_search = st.session_state.get("last_search")
+
+    if not last_search:
+        st.info("Ask a question in the Search tab first — a detailed evaluation "
+                 "breakdown of that query will appear here.")
+    elif last_search["intent"] != "question":
+        st.write(f"**Question:** {last_search['query']}")
+        st.write(f"**Handled as:** {last_search['intent']} — greetings and capability "
+                 "questions bypass retrieval entirely, so there's nothing to evaluate.")
+    else:
+        retrieved = last_search["retrieved"]
+        confidence = last_search["confidence"]
+        st.write(f"**Question:** {last_search['query']}")
+        st.write(f"**Settings used:** top_k={last_search['top_k']}, mode={last_search['mode']}")
+        st.write(f"**Refused (no evidence found)?** {'Yes' if not retrieved else 'No'}")
+
+        if retrieved:
+            distinct_docs = {chunk.doc_title for chunk, _ in retrieved}
+            avg_score = sum(score for _, score in retrieved) / len(retrieved)
+            st.write(f"**Chunks retrieved above threshold:** {len(retrieved)}")
+            st.write(f"**Distinct source documents:** {len(distinct_docs)}")
+            st.write(f"**Average similarity:** {avg_score:.3f}")
+            if confidence:
+                _CONFIDENCE_DISPLAY[confidence](
+                    f"Confidence: {confidence} — {len(distinct_docs)} distinct source(s), "
+                    f"average similarity {avg_score:.2f}"
+                )
+
+            st.write("**Retrieved chunks (full detail):**")
+            for chunk, score in retrieved:
+                with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
+                    st.write(chunk.text)
+                    st.caption(explain_chunk(last_search["query"], chunk))
+                    if chunk.source_url:
+                        st.caption(f"Source URL: {chunk.source_url}")
+        else:
+            st.write("No chunks cleared the similarity threshold for this query — the "
+                     "system correctly refused rather than guessing from weak evidence.")
+
+    st.divider()
+    st.subheader("Fixed 10-question evaluation set")
     st.caption(
-        "Runs the same 10 test questions documented in docs/evaluation.md through the "
-        "live pipeline, using the current sidebar settings (top-k, answer mode). "
-        "Results are shown here for this session only, not saved to disk."
+        "Optional: runs the same 10 test questions documented in docs/evaluation.md "
+        "through the live pipeline, using the current sidebar settings (top-k, answer "
+        "mode). Results are shown here for this session only, not saved to disk."
     )
 
     if st.button("Run evaluation", icon=":material/play_arrow:"):
