@@ -5,3 +5,7 @@
 # Cloud logs from transformers' lazy-loaded, torchvision-only vision
 # submodules -- unrelated to this project, which only uses text embeddings.
 fileWatcherType = "none"
+# Hard ceiling on any single file_uploader upload (MB). rag/ingest.py's
+# MAX_UPLOAD_BYTES (5 MB) is the real per-file limit shown to the user;
+# this is just an outer server-level guard.
+maxUploadSize = 10

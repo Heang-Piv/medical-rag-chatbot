@@ -26,7 +26,7 @@ except Exception:
     pass
 
 from config import config
-from rag.ingest import load_documents, build_chunk_records
+from rag.ingest import load_documents, build_chunk_records, save_uploaded_file, MAX_UPLOAD_BYTES
 from rag.embed_store import VectorStore
 from rag.retriever import explain_chunk, retrieve
 from rag.generate import capability_answer, confidence_level, detect_intent, generate_answer, GREETING_RESPONSE
@@ -42,24 +42,27 @@ _CONFIDENCE_DISPLAY = {
     "Low": st.warning,
 }
 
+UPLOAD_SUBFOLDER = "uploaded"
+
 
 @st.cache_resource(show_spinner="Loading index...")
 def load_store():
     docs = load_documents(config.data_folder)
-    chunks = build_chunk_records(docs)
     store = VectorStore()
-    if store.count() == 0 and chunks:
+    if store.count() == 0:
         # First run on this environment (e.g. a fresh Streamlit Cloud container
         # with no persisted chroma_db/) — build once. Local dev normally skips
         # this by running scripts/build_index.py ahead of time, which is still
         # the right way to deliberately rebuild after a config/data change.
-        logger.info("No persisted index found — building now (%d chunks)", len(chunks))
-        store.build(chunks)
-    return store, docs, chunks
+        chunks = build_chunk_records(docs)
+        if chunks:
+            logger.info("No persisted index found — building now (%d chunks)", len(chunks))
+            store.build(chunks)
+    return store, docs
 
 
 try:
-    store, docs, chunks = load_store()
+    store, docs = load_store()
 except Exception:
     logger.exception("Failed to load the document index")
     st.error(
@@ -83,10 +86,63 @@ with st.sidebar:
                      help=f"Extractive works with no setup. LLM mode calls {config.llm_provider} "
                           f"and needs its API key set (.env locally, or Secrets on Streamlit Cloud).")
     st.divider()
-    st.caption(f"Indexed **{len(docs)}** documents → **{len(chunks)}** chunks")
+    st.caption(f"Indexed **{len(docs)}** documents on disk → **{store.count()}** chunks in the index")
     with st.expander("Documents in this index"):
         for d in docs:
             st.write(f"- {d['title']}")
+
+    st.divider()
+    st.subheader("Chunking & index")
+    chunk_size = st.slider(
+        "Chunk size (tokens)", min_value=50, max_value=800, value=config.chunk_size_tokens, step=10,
+        help="Words per chunk. Changing this has no effect until you click Rebuild index below.",
+    )
+    chunk_overlap = st.slider(
+        "Chunk overlap (tokens)", min_value=0, max_value=300, value=config.chunk_overlap_tokens, step=10,
+        help="Words repeated between consecutive chunks.",
+    )
+
+    st.subheader("Add documents")
+    st.caption(
+        "Uploaded files are added to the same index but are not vetted WHO/CDC/NIH "
+        "sources — treat answers grounded in them accordingly."
+    )
+    uploaded_files = st.file_uploader(
+        "Upload .txt / .md / .pdf files",
+        type=["txt", "md", "pdf"],
+        accept_multiple_files=True,
+        help=f"Max {MAX_UPLOAD_BYTES / (1024 * 1024):.0f} MB per file.",
+    )
+    if "saved_uploads" not in st.session_state:
+        st.session_state.saved_uploads = set()
+    for uploaded in uploaded_files or []:
+        if uploaded.name in st.session_state.saved_uploads:
+            continue
+        try:
+            save_uploaded_file(
+                os.path.join(config.data_folder, UPLOAD_SUBFOLDER), uploaded.name, uploaded.getvalue()
+            )
+            st.session_state.saved_uploads.add(uploaded.name)
+            st.success(f"Saved '{uploaded.name}'. Click Rebuild index to include it.")
+        except ValueError as e:
+            st.error(str(e))
+
+    if st.button("🔄 Rebuild index", help="Re-chunks and re-embeds every document using the settings above."):
+        with st.spinner("Rebuilding index..."):
+            try:
+                rebuild_docs = load_documents(config.data_folder)
+                rebuild_chunks = build_chunk_records(rebuild_docs, chunk_size=chunk_size, overlap=chunk_overlap)
+                VectorStore().build(rebuild_chunks)
+                logger.info(
+                    "Manual rebuild: %d documents -> %d chunks (chunk_size=%d, overlap=%d)",
+                    len(rebuild_docs), len(rebuild_chunks), chunk_size, chunk_overlap,
+                )
+            except Exception:
+                logger.exception("Manual index rebuild failed")
+                st.error("Rebuild failed. Check the logs for details.")
+            else:
+                load_store.clear()
+                st.rerun()
 
 st.title("🔎 RAG-Based AI Search System")
 st.caption("Ask a question about the indexed medical documents below (WHO / CDC / NIH sources only).")
@@ -95,8 +151,9 @@ st.caption(
     "and are not a substitute for professional medical advice, diagnosis, or treatment."
 )
 
-query = st.text_input("Your question", placeholder="e.g. How does content-based filtering rank items?")
-search_clicked = st.button("Search", type="primary")
+with st.form("search_form"):
+    query = st.text_input("Your question", placeholder="e.g. How does content-based filtering rank items?")
+    search_clicked = st.form_submit_button("Search", type="primary")
 
 if search_clicked and query.strip():
     intent = detect_intent(query)

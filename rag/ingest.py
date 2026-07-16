@@ -32,6 +32,8 @@ _KNOWN_SOURCE_ORGS = ("who", "cdc", "nih")
 _PARAGRAPH_RE = re.compile(r"\n\s*\n")
 _SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
 
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB per file — plenty for text/PDF docs
+
 
 @dataclass
 class Chunk:
@@ -120,6 +122,24 @@ def load_documents(folder: str) -> List[dict]:
     else:
         _logger.warning("No documents found in '%s'", folder)
     return docs
+
+
+def save_uploaded_file(folder: str, filename: str, content: bytes) -> None:
+    """Save an uploaded document's raw bytes into `folder` so the next index
+    rebuild (see scripts/build_index.py or app.py's Rebuild Index button)
+    picks it up via load_documents().
+
+    Raises ValueError if content exceeds MAX_UPLOAD_BYTES, so the caller can
+    show a clear message instead of silently accepting an oversized file.
+    """
+    if len(content) > MAX_UPLOAD_BYTES:
+        raise ValueError(
+            f"'{filename}' is {len(content) / (1024 * 1024):.1f} MB, over the "
+            f"{MAX_UPLOAD_BYTES / (1024 * 1024):.0f} MB limit."
+        )
+    os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(folder, filename), "wb") as f:
+        f.write(content)
 
 
 def _word_count(text: str) -> int:
