@@ -34,7 +34,7 @@ from rag.utils import get_logger
 
 logger = get_logger(__name__)
 
-st.set_page_config(page_title="RAG Search", page_icon="🔎", layout="wide")
+st.set_page_config(page_title="Medical RAG Search", page_icon=":material/health_and_safety:", layout="wide")
 
 _CONFIDENCE_DISPLAY = {
     "High": st.success,
@@ -43,6 +43,22 @@ _CONFIDENCE_DISPLAY = {
 }
 
 UPLOAD_SUBFOLDER = "uploaded"
+
+# The same 10 questions documented in docs/evaluation.md — kept identical so
+# the in-app Evaluation tab and the written evaluation report describe the
+# same test set, not two different ones that could quietly drift apart.
+EVALUATION_QUESTIONS = [
+    ("Easy", "What are common symptoms of the flu?"),
+    ("Easy", "How is malaria transmitted?"),
+    ("Easy", "What is asthma?"),
+    ("Easy", "What causes tuberculosis?"),
+    ("Medium", "What are the risk factors for type 2 diabetes?"),
+    ("Medium", "How are high blood pressure and heart disease related?"),
+    ("Medium", "What lifestyle changes can help prevent cardiovascular disease?"),
+    ("Hard", "Can a specific experimental gene therapy cure diabetes?"),
+    ("Hard", "What is the recommended dosage of ibuprofen for a child's fever?"),
+    ("Hard", "Does eating chocolate cause acne?"),
+]
 
 
 @st.cache_resource(show_spinner="Loading index...")
@@ -127,7 +143,8 @@ with st.sidebar:
         except ValueError as e:
             st.error(str(e))
 
-    if st.button("🔄 Rebuild index", help="Re-chunks and re-embeds every document using the settings above."):
+    if st.button("Rebuild index", icon=":material/refresh:",
+                 help="Re-chunks and re-embeds every document using the settings above."):
         with st.spinner("Rebuilding index..."):
             try:
                 rebuild_docs = load_documents(config.data_folder)
@@ -144,49 +161,84 @@ with st.sidebar:
                 load_store.clear()
                 st.rerun()
 
-st.title("🔎 RAG-Based AI Search System")
-st.caption("Ask a question about the indexed medical documents below (WHO / CDC / NIH sources only).")
-st.caption(
-    "⚠️ **Medical disclaimer:** answers are summarized from the retrieved documents only "
-    "and are not a substitute for professional medical advice, diagnosis, or treatment."
-)
+search_tab, eval_tab = st.tabs(["Search", "Evaluation"])
 
-with st.form("search_form"):
-    query = st.text_input("Your question", placeholder="e.g. How does content-based filtering rank items?")
-    search_clicked = st.form_submit_button("Search", type="primary")
+with search_tab:
+    st.title(":material/health_and_safety: Medical RAG Search System")
+    st.caption("Ask a question about the indexed medical documents below (WHO / CDC / NIH sources only).")
+    st.caption(
+        ":material/warning: **Medical disclaimer:** answers are summarized from the retrieved documents only "
+        "and are not a substitute for professional medical advice, diagnosis, or treatment."
+    )
 
-if search_clicked and query.strip():
-    intent = detect_intent(query)
+    query = st.chat_input("Ask a medical question, e.g. What are common flu symptoms?")
 
-    if intent == "greeting":
-        st.subheader("Answer")
-        st.write(GREETING_RESPONSE)
-    elif intent == "capability":
-        logger.info("Handled as capability query, skipped retrieval")
-        st.subheader("Answer")
-        st.write(capability_answer(docs))
-    else:
-        try:
-            retrieved = retrieve(store, query, top_k=top_k)
-            answer = generate_answer(query, retrieved, mode=mode)
-        except Exception:
-            logger.exception("Search failed for query: %r", query)
-            st.error("Something went wrong while processing your question. Please try again.")
-        else:
+    if query and query.strip():
+        intent = detect_intent(query)
+
+        if intent == "greeting":
             st.subheader("Answer")
-            st.write(answer)
-
-            confidence = confidence_level(retrieved)
-            if confidence:
-                _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
-
-            st.subheader("Sources")
-            if retrieved:
-                for chunk, score in retrieved:
-                    with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
-                        st.write(chunk.text)
-                        st.caption(explain_chunk(query, chunk))
+            st.write(GREETING_RESPONSE)
+        elif intent == "capability":
+            logger.info("Handled as capability query, skipped retrieval")
+            st.subheader("Answer")
+            st.write(capability_answer(docs))
+        else:
+            try:
+                retrieved = retrieve(store, query, top_k=top_k)
+                answer = generate_answer(query, retrieved, mode=mode)
+            except Exception:
+                logger.exception("Search failed for query: %r", query)
+                st.error("Something went wrong while processing your question. Please try again.")
             else:
-                st.caption("No sources cleared the similarity threshold for this query.")
-elif search_clicked:
-    st.warning("Type a question first.")
+                st.subheader("Answer")
+                st.write(answer)
+
+                confidence = confidence_level(retrieved)
+                if confidence:
+                    _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
+
+                st.subheader("Sources")
+                if retrieved:
+                    for chunk, score in retrieved:
+                        with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
+                            st.write(chunk.text)
+                            st.caption(explain_chunk(query, chunk))
+                else:
+                    st.caption("No sources cleared the similarity threshold for this query.")
+
+with eval_tab:
+    st.subheader("Retrieval & Generation Evaluation")
+    st.caption(
+        "Runs the same 10 test questions documented in docs/evaluation.md through the "
+        "live pipeline, using the current sidebar settings (top-k, answer mode). "
+        "Results are shown here for this session only, not saved to disk."
+    )
+
+    if st.button("Run evaluation", icon=":material/play_arrow:"):
+        progress = st.progress(0.0, text="Running evaluation questions...")
+        results = []
+        for i, (category, eval_query) in enumerate(EVALUATION_QUESTIONS):
+            eval_retrieved = retrieve(store, eval_query, top_k=top_k)
+            eval_answer = generate_answer(eval_query, eval_retrieved, mode=mode)
+            eval_confidence = confidence_level(eval_retrieved)
+            results.append((category, eval_query, eval_retrieved, eval_answer, eval_confidence))
+            progress.progress((i + 1) / len(EVALUATION_QUESTIONS), text=f"Ran {i + 1}/{len(EVALUATION_QUESTIONS)}")
+        progress.empty()
+        st.session_state.eval_results = results
+        logger.info("Ran in-app evaluation: %d questions, mode=%s", len(EVALUATION_QUESTIONS), mode)
+
+    eval_results = st.session_state.get("eval_results")
+    if eval_results:
+        for category, eval_query, eval_retrieved, eval_answer, eval_confidence in eval_results:
+            with st.expander(f"[{category}] {eval_query}"):
+                st.write("**Answer**")
+                st.write(eval_answer)
+                if eval_confidence:
+                    _CONFIDENCE_DISPLAY[eval_confidence](f"Confidence: {eval_confidence}")
+                st.write("**Retrieved sources**")
+                if eval_retrieved:
+                    for chunk, score in eval_retrieved:
+                        st.write(f"- {chunk.doc_title} (similarity {score:.2f})")
+                else:
+                    st.write("- No sources cleared the similarity threshold.")

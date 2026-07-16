@@ -9,3 +9,10 @@ fileWatcherType = "none"
 # MAX_UPLOAD_BYTES (5 MB) is the real per-file limit shown to the user;
 # this is just an outer server-level guard.
 maxUploadSize = 10
+
+[theme]
+base = "dark"
+primaryColor = "#3B82F6"             # blue accent — buttons, active tab, slider
+backgroundColor = "#0E1117"          # near-black page background
+secondaryBackgroundColor = "#1B2430" # sidebar / widget background, slightly lifted
+textColor = "#E5E7EB"
