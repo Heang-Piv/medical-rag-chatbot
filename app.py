@@ -10,7 +10,20 @@ your final project by upgrading each piece (see the TODOs in rag/embed_store.py
 and rag/generate.py) without needing to touch this file's overall structure.
 """
 
+import os
+
 import streamlit as st
+
+# On Streamlit Community Cloud, API keys are set via the dashboard's Secrets
+# manager (st.secrets), not a committed .env file. Bridge them into os.environ
+# so config.py's plain os.environ.get() calls work unchanged in both places.
+# Wrapped in try/except: st.secrets raises if no secrets.toml/Cloud secrets
+# exist at all, which is the normal case for local development with .env.
+try:
+    for _key, _value in st.secrets.items():
+        os.environ.setdefault(_key, str(_value))
+except Exception:
+    pass
 
 from config import config
 from rag.ingest import load_documents, build_chunk_records
@@ -35,6 +48,13 @@ def load_store():
     docs = load_documents(config.data_folder)
     chunks = build_chunk_records(docs)
     store = VectorStore()
+    if store.count() == 0 and chunks:
+        # First run on this environment (e.g. a fresh Streamlit Cloud container
+        # with no persisted chroma_db/) — build once. Local dev normally skips
+        # this by running scripts/build_index.py ahead of time, which is still
+        # the right way to deliberately rebuild after a config/data change.
+        logger.info("No persisted index found — building now (%d chunks)", len(chunks))
+        store.build(chunks)
     return store, docs, chunks
 
 
@@ -51,8 +71,8 @@ except Exception:
 
 if store.count() == 0:
     st.error(
-        "The document index hasn't been built yet. From the project root, run:\n\n"
-        "`python scripts/build_index.py`\n\nthen restart this app."
+        f"No documents were found under '{config.data_folder}', so there's nothing to "
+        "index. Check that the data folder exists and contains .txt/.md/.pdf files."
     )
     st.stop()
 
