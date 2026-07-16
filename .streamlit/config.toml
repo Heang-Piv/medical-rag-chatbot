@@ -1,0 +1,7 @@
+[server]
+# Disables Streamlit's dev-mode source-file watcher. It's a hot-reload
+# convenience for local development that has no benefit on a deployed
+# app, and it was the source of noisy (but harmless) tracebacks in the
+# Cloud logs from transformers' lazy-loaded, torchvision-only vision
+# submodules -- unrelated to this project, which only uses text embeddings.
+fileWatcherType = "none"
