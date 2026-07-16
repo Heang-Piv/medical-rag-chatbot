@@ -1,13 +1,13 @@
 """
-RAG-Based AI Search System — starter interface.
+Medical RAG Search System — Streamlit interface.
 
 Run with:
     streamlit run app.py
 
-This gives you a working, end-to-end demo today: document loading, TF-IDF based
-retrieval, and an extractive answer — all wired into a real web interface. Build
-your final project by upgrading each piece (see the TODOs in rag/embed_store.py
-and rag/generate.py) without needing to touch this file's overall structure.
+Wires together ingestion (rag/ingest.py), embeddings + persistent vector
+store (rag/embed_store.py), similarity-threshold retrieval (rag/retriever.py),
+and grounded generation (rag/generate.py) behind a query box, an answer
+panel, and a sources panel.
 """
 
 import os
@@ -81,7 +81,7 @@ with st.sidebar:
     top_k = st.slider("Number of chunks to retrieve", min_value=1, max_value=10, value=config.top_k_default)
     mode = st.radio("Answer mode", ["extractive", "llm"], index=0,
                      help=f"Extractive works with no setup. LLM mode calls {config.llm_provider} "
-                          f"and needs its API key set in .env.")
+                          f"and needs its API key set (.env locally, or Secrets on Streamlit Cloud).")
     st.divider()
     st.caption(f"Indexed **{len(docs)}** documents → **{len(chunks)}** chunks")
     with st.expander("Documents in this index"):
