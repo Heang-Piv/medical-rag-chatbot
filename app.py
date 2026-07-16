@@ -29,7 +29,7 @@ from config import config
 from rag.ingest import load_documents, build_chunk_records
 from rag.embed_store import VectorStore
 from rag.retriever import explain_chunk, retrieve
-from rag.generate import confidence_level, generate_answer
+from rag.generate import capability_answer, confidence_level, detect_intent, generate_answer, GREETING_RESPONSE
 from rag.utils import get_logger
 
 logger = get_logger(__name__)
@@ -99,27 +99,37 @@ query = st.text_input("Your question", placeholder="e.g. How does content-based 
 search_clicked = st.button("Search", type="primary")
 
 if search_clicked and query.strip():
-    try:
-        retrieved = retrieve(store, query, top_k=top_k)
-        answer = generate_answer(query, retrieved, mode=mode)
-    except Exception:
-        logger.exception("Search failed for query: %r", query)
-        st.error("Something went wrong while processing your question. Please try again.")
-    else:
+    intent = detect_intent(query)
+
+    if intent == "greeting":
         st.subheader("Answer")
-        st.write(answer)
-
-        confidence = confidence_level(retrieved)
-        if confidence:
-            _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
-
-        st.subheader("Sources")
-        if retrieved:
-            for chunk, score in retrieved:
-                with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
-                    st.write(chunk.text)
-                    st.caption(explain_chunk(query, chunk))
+        st.write(GREETING_RESPONSE)
+    elif intent == "capability":
+        logger.info("Handled as capability query, skipped retrieval")
+        st.subheader("Answer")
+        st.write(capability_answer(docs))
+    else:
+        try:
+            retrieved = retrieve(store, query, top_k=top_k)
+            answer = generate_answer(query, retrieved, mode=mode)
+        except Exception:
+            logger.exception("Search failed for query: %r", query)
+            st.error("Something went wrong while processing your question. Please try again.")
         else:
-            st.caption("No sources cleared the similarity threshold for this query.")
+            st.subheader("Answer")
+            st.write(answer)
+
+            confidence = confidence_level(retrieved)
+            if confidence:
+                _CONFIDENCE_DISPLAY[confidence](f"Confidence: {confidence}")
+
+            st.subheader("Sources")
+            if retrieved:
+                for chunk, score in retrieved:
+                    with st.expander(f"{chunk.doc_title}  ·  similarity {score:.2f}"):
+                        st.write(chunk.text)
+                        st.caption(explain_chunk(query, chunk))
+            else:
+                st.caption("No sources cleared the similarity threshold for this query.")
 elif search_clicked:
     st.warning("Type a question first.")

@@ -8,7 +8,9 @@ import pytest
 
 from rag.generate import (
     NO_EVIDENCE_MESSAGE,
+    capability_answer,
     confidence_level,
+    detect_intent,
     extractive_answer,
     generate_answer,
     llm_answer,
@@ -247,3 +249,48 @@ def test_confidence_level_moderate_for_single_source_or_middling_score() -> None
 
 def test_confidence_level_low_for_weak_evidence() -> None:
     assert confidence_level([(CHUNK, 0.52), (CHUNK_B, 0.50)]) == "Low"
+
+
+# --- detect_intent: greetings/meta-questions bypass retrieval entirely ---
+
+@pytest.mark.parametrize("query", ["hi", "Hello!", "  hey  ", "Hello.", "good morning", "yo"])
+def test_detect_intent_recognizes_greetings(query: str) -> None:
+    assert detect_intent(query) == "greeting"
+
+
+@pytest.mark.parametrize(
+    "query",
+    ["what do you know", "What do you know?", "what can you do", "what topics do you have"],
+)
+def test_detect_intent_recognizes_capability_questions(query: str) -> None:
+    assert detect_intent(query) == "capability"
+
+
+@pytest.mark.parametrize(
+    "query",
+    [
+        "What are common flu symptoms?",
+        "hi, what causes diabetes?",  # greeting + real question -> must not short-circuit
+        "what do you know about diabetes",  # capability phrasing + real topic -> must not short-circuit
+        "How are high blood pressure and heart disease related?",
+    ],
+)
+def test_detect_intent_does_not_misclassify_real_questions(query: str) -> None:
+    assert detect_intent(query) == "question"
+
+
+# --- capability_answer: deterministic, grounded in the real indexed corpus ---
+
+def test_capability_answer_describes_indexed_corpus() -> None:
+    docs = [
+        {"title": "Diabetes", "source_org": "WHO"},
+        {"title": "Flu", "source_org": "CDC"},
+    ]
+    answer = capability_answer(docs)
+    assert "2 documents" in answer
+    assert "WHO" in answer and "CDC" in answer
+    assert "Diabetes" in answer and "Flu" in answer
+
+
+def test_capability_answer_handles_empty_corpus() -> None:
+    assert capability_answer([]) == "No documents are currently indexed."
