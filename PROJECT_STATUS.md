@@ -35,28 +35,44 @@ claude.ai) and implementation (Claude Code, from here on).
 | M1 | Environment setup (`config.py`, `.env.example`, `.gitignore`) | Done |
 | M2 | Medical dataset — 24 docs, WHO/CDC/NIH, `data/medical/{who,cdc,nih}/` + `manifest.json` | Done |
 | M3 | Ingestion upgrade — recursive loader, `.txt`/`.md`/`.pdf`, metadata (source_org, source_url) on every `Chunk` | Done |
-| M4 | Chunking — replace word-count `chunk_text()` with recursive/boundary-aware splitter | **Next** |
-| M5 | Embeddings — swap TF-IDF in `rag/embed_store.py` for `bge-small-en-v1.5` | Not started |
-| M6 | ChromaDB — persistent store, separate build step from app startup | Not started |
-| M7 | Retrieval — configurable top-k (already have the UI slider), similarity-threshold refusal | Not started |
-| M8 | Prompt engineering — compare 3 strategies, pick one, `rag/prompt.py` | Not started |
-| M9 | Generation — real LLM call (2 providers), citations, confidence statement (High/Moderate/Low, deterministic) | Not started |
-| M10 | UI polish — explainability text per chunk, confidence badge, medical disclaimer, error handling, logging | Not started |
-| — | Evaluation — 10 test questions (easy/medium/hard), results table | Not started |
-| — | Documentation — README, architecture diagram, design-decisions doc, presentation outline, demo script | Not started |
+| M4 | Chunking — replace word-count `chunk_text()` with recursive/boundary-aware splitter | Done |
+| M5 | Embeddings — swap TF-IDF in `rag/embed_store.py` for `bge-small-en-v1.5` | Done |
+| M6 | ChromaDB — persistent store, separate build step from app startup | Done |
+| M7 | Retrieval — configurable top-k (already have the UI slider), similarity-threshold refusal | Done |
+| M8 | Prompt engineering — compare 3 strategies, pick one, `rag/prompt.py` | Done |
+| M9 | Generation — real LLM call (2 providers), citations, confidence statement (High/Moderate/Low, deterministic) | Done |
+| M10 | UI polish — explainability text per chunk, confidence badge, medical disclaimer, error handling, logging | Done |
+| — | Evaluation — 10 test questions (easy/medium/hard), results table | Done — `docs/evaluation.md` |
+| — | Documentation — README, architecture diagram, design decisions | Done — `README.md` |
+| — | Presentation outline, demo script, Q&A prep | Done — `docs/presentation.md` |
+
+Deployed live on Streamlit Community Cloud: https://medical-rag-chatbot-peow.streamlit.app/
 
 ## Known gaps / things to watch
 
-- Two of the 24 sourced documents (WHO diabetes page, and 6 CDC/NIH pages) were
-  built from strong prior knowledge rather than a freshly verified fetch —
-  worth a quick manual click-check on their URLs (see `data/medical/manifest.json`)
-  before relying on them being byte-for-byte current.
-- `rag/embed_store.py` still runs TF-IDF (unchanged since the starter). M5 is
-  the milestone that replaces it — don't be surprised retrieval quality is
-  still mediocre until then.
-- `chunk_text()` in `rag/ingest.py` is still the naive word-count splitter.
-  Its interface (`chunk_text(text) -> List[str]`) is meant to stay stable
-  through the M4 rewrite so nothing downstream has to change.
+- **Re-run the 3 "hard" evaluation questions in `mode="llm"` with a real API key
+  before presenting.** `docs/evaluation.md` was written using extractive mode
+  only (no API key was available in that environment), so Guard 2/3's
+  relevance-judgment refusal behavior is unit-tested
+  (`tests/test_generate.py`, `tests/test_prompt.py`) but not yet confirmed
+  against a live model. This is the single most important verification step
+  left — see the README's Evaluation section and `docs/evaluation.md`'s
+  Limitations section for detail.
+- Two of the 24 sourced documents (WHO diabetes page, and several CDC/NIH
+  pages) were built from strong prior knowledge rather than a freshly
+  verified fetch — worth a quick manual click-check on their URLs (see
+  `data/medical/manifest.json`) before relying on them being byte-for-byte
+  current.
+
+## What's left before presentation day (29 July 2026)
+
+1. Re-run hard-tier questions in LLM mode with a real API key (see above) and
+   update `docs/evaluation.md` with the result — right now it's the one claim
+   in the whole project that's argued from design/unit-tests rather than
+   demonstrated live.
+2. Turn `docs/presentation.md`'s outline into actual slides.
+3. Rehearse the demo script in `docs/presentation.md` against the live
+   Streamlit deployment, not just localhost.
 
 ## Working style (carried over from the course meta-prompt)
 
