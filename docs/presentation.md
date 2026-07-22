@@ -73,7 +73,8 @@ here. Trace a single example query through the diagram out loud.
 
 - Embeddings: `BAAI/bge-small-en-v1.5` (sentence-transformers, local)
 - Vector store: ChromaDB (persistent)
-- LLM: Claude (primary) / OpenAI (secondary), config-driven
+- LLM: config-driven Anthropic/OpenAI abstraction — live demo runs NVIDIA
+  NIM's free-tier `openai/gpt-oss-120b` through the OpenAI code path
 - Interface: Streamlit, deployed on Streamlit Community Cloud
 - One line each on *why*, not just *what* — see README's Design Decisions
   table
@@ -257,6 +258,13 @@ BGE-small is trained specifically for asymmetric retrieval (short query →
 long passage matching), which is exactly this use case, at roughly
 MiniLM's size and speed. BGE-base's quality gain didn't justify 2-3x the
 model size for a corpus this small.
+
+**Why did you choose your LLM provider?**
+The system supports Anthropic Claude and OpenAI natively, plus any
+OpenAI-compatible endpoint via `OPENAI_BASE_URL`. For the live demo I'm
+running NVIDIA NIM's free-tier `gpt-oss-120b` through that same OpenAI code
+path — same abstraction, zero-cost inference, which matters for a student
+project that needs to stay demoable without a paid API key.
 
 **How would you improve this project in the future?**
 Hybrid retrieval (BM25 + embeddings) to catch exact-term matches like drug

@@ -87,7 +87,7 @@ behind a chat bubble.
 | Chunking | Custom recursive splitter (`rag/ingest.py`) | Paragraph → sentence → word-boundary fallback |
 | Embeddings | `sentence-transformers` — `BAAI/bge-small-en-v1.5` | Local, free, no API key required |
 | Vector store | [ChromaDB](https://www.trychroma.com/) (persistent, on-disk) | Cosine similarity index |
-| LLM generation | Anthropic Claude (primary) / OpenAI (secondary), config-driven | Also supports any OpenAI-compatible endpoint (e.g. NVIDIA NIM) via `OPENAI_BASE_URL` |
+| LLM generation | Anthropic Claude / OpenAI, config-driven | The live demo runs NVIDIA NIM's free-tier `openai/gpt-oss-120b` through the OpenAI code path (`OPENAI_BASE_URL=https://integrate.api.nvidia.com/v1`) — same abstraction, zero-cost inference for a student project |
 | Config | `python-dotenv` + a single `config.py` dataclass | No hardcoded values outside `config.py` |
 | Testing | `pytest` | 61 unit tests across ingestion, chunking, embeddings, retrieval, prompt, and generation |
 | Language | Python 3.11 | |
@@ -210,6 +210,17 @@ ANTHROPIC_API_KEY=sk-ant-...    # required only for LLM mode with this provider
 OPENAI_API_KEY=sk-...           # required only for LLM mode with this provider
 ```
 
+**No paid API key required to try LLM mode.** The live demo runs on NVIDIA
+NIM's free-tier model catalog through the OpenAI-compatible code path — grab
+a free key at [build.nvidia.com](https://build.nvidia.com) and set:
+
+```bash
+LLM_PROVIDER=openai
+LLM_MODEL=openai/gpt-oss-120b
+OPENAI_API_KEY=<your NVIDIA API key>
+OPENAI_BASE_URL=https://integrate.api.nvidia.com/v1
+```
+
 All other values (chunk size, top-k, similarity threshold, embedding model, log
 level) have sensible defaults in `config.py` and rarely need changing.
 
@@ -257,7 +268,7 @@ development because it keeps app startup fast.
 | **Vector store** | ChromaDB, persistent on-disk | Avoids re-embedding the whole corpus on every app restart; native metadata support (source org/URL per chunk); far simpler to operate than standing up Postgres/pgvector for a ~50-chunk corpus, with a clear upgrade path if the corpus grows |
 | **Embedding model** | `BAAI/bge-small-en-v1.5` | Compared against MiniLM and BGE-base: similar size/speed to MiniLM but trained specifically for retrieval (asymmetric query/passage matching), while BGE-base's quality gain wasn't worth ~2-3x the model size for a corpus this small. Runs locally, no API key, no per-query cost |
 | **Chunking strategy** | Recursive, paragraph → sentence → word-boundary fallback, ~350 words / ~50-word overlap | Fixed-size chunking regularly splits mid-sentence, hurting retrieval precision. Recursive splitting only breaks mid-sentence for the rare sentence exceeding the chunk size on its own. 350/50 keeps chunks large enough to carry a full idea while enough overlap to survive being cut near a boundary |
-| **LLM providers** | Anthropic (primary) + OpenAI (secondary), config-driven `if/elif` in `rag/generate.py` | Two real providers, switchable via `.env`, prove the abstraction works without building an unnecessary plugin framework. Also supports any OpenAI-compatible endpoint via `OPENAI_BASE_URL` (e.g. free-tier NVIDIA NIM models) |
+| **LLM providers** | Anthropic + OpenAI, config-driven `if/elif` in `rag/generate.py` | Two real providers, switchable via `.env`, prove the abstraction works without building an unnecessary plugin framework. The `openai` branch also targets any OpenAI-compatible endpoint via `OPENAI_BASE_URL` — the live demo actually runs on NVIDIA NIM's free-tier `openai/gpt-oss-120b` this way, so the project doesn't depend on a paid API key to demo |
 | **Prompt strategy** | "Structured Context" (judge relevance → summarize → cite), over a simpler "cite whatever was retrieved" prompt or a hidden chain-of-thought prompt | Similarity-threshold retrieval alone can pass chunks that are topically related but don't actually answer the question (e.g. a diabetes-overview chunk for a gene-therapy question). The prompt explicitly instructs the model to judge *relevance*, not just *topic match*, before using an excerpt. A chain-of-thought variant was rejected — it would need response parsing to hide reasoning from the visible answer, for a benefit that's hard to measure at this corpus size |
 | **Interface** | Streamlit | Satisfies the interface requirement in one file, with a fast local dev loop and zero-friction free hosting on Streamlit Community Cloud |
 | **Configuration** | Single `config.py` dataclass reading from `.env`, no hardcoded values elsewhere | Every tunable (chunk size, top-k, similarity threshold, model names, API keys) can change without touching code — required for reproducibility and for grading transparency |
